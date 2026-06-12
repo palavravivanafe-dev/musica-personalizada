@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config();// v2 fixed
 const express = require('express');
 const axios = require('axios');
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
