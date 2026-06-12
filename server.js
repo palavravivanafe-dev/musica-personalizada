@@ -21,38 +21,28 @@ function buildLyrics(d) {
   const sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
   const estilo = (d.estilo || 'Pop').split(' ')[0];
   const clima = (d.clima || 'Romantico').split(' ')[0];
-  const ref = d.ref ? `, estilo ${d.ref}` : '';
-  return `[Estilo: ${estilo}, ${clima}${ref}]
-
-[Verso 1]
-${d.nome_p}, voce e ${d.palavras || 'especial e unica'}
-${d.frase ? '"' + d.frase + '"\n' : ''}${d.memoria ? d.memoria.substring(0, 80) : 'Lembro de cada momento ao seu lado'}
-
-[Pre-refrao]
-${d.especial ? d.especial.substring(0, 60) : 'Essa historia que construimos juntos'}
-E o que me faz ter certeza do que sinto
-
-[Refrao]
-${d.nome_p}, essa musica e pra voce
-Feita com o amor que ${d.relacao || 'alguem especial'} tem
-${d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : ''}Que esse momento fique pra sempre
-No coracao, na memoria, em mim
-
-[Verso 2]
-${sentir ? 'Quero que voce possa ' + sentir.split(',')[0].toLowerCase() : 'Cada nota guarda um pedaco nosso'}
-${d.especial ? d.especial.substring(0, 50) : 'Cada verso fala do que vivemos'}
-Essa cancao nasceu do fundo da alma
-Um presente que nao tem igual
-
-[Refrao]
-${d.nome_p}, essa musica e pra voce
-Feita com o amor que ${d.relacao || 'alguem especial'} tem
-${d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : ''}Que esse momento fique pra sempre
-No coracao, na memoria, em mim
-
-[Outro]
-${d.nome_p}... essa cancao e so sua
-Criada com amor, do fundo do coracao`;
+  return '[Estilo: ' + estilo + ', ' + clima + ']\n\n[Verso 1]\n' +
+    d.nome_p + ', voce e ' + (d.palavras || 'especial') + '\n' +
+    (d.frase ? '"' + d.frase + '"\n' : '') +
+    (d.memoria ? d.memoria.substring(0, 80) : 'Cada momento ao seu lado') + '\n\n' +
+    '[Pre-refrao]\n' +
+    (d.especial ? d.especial.substring(0, 60) : 'Essa historia que construimos') + '\n' +
+    'E o que me faz ter certeza\n\n' +
+    '[Refrao]\n' +
+    d.nome_p + ', essa musica e pra voce\n' +
+    'Feita com amor de ' + (d.relacao || 'alguem especial') + '\n' +
+    (d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : '') + 'Que fique pra sempre\n' +
+    'No coracao, na memoria\n\n' +
+    '[Verso 2]\n' +
+    (sentir ? 'Quero que voce possa ' + sentir.split(',')[0].toLowerCase() : 'Cada nota guarda um pedaco nosso') + '\n' +
+    'Essa cancao nasceu do fundo da alma\n' +
+    'Um presente que nao tem igual\n\n' +
+    '[Refrao]\n' +
+    d.nome_p + ', essa musica e pra voce\n' +
+    'Feita com amor de ' + (d.relacao || 'alguem especial') + '\n' +
+    'Que fique pra sempre no coracao\n\n' +
+    '[Outro]\n' +
+    d.nome_p + '... essa cancao e so sua';
 }
 
 app.post('/api/generate', async (req, res) => {
@@ -62,31 +52,21 @@ app.post('/api/generate', async (req, res) => {
     sessions.set(sessionId, { formData, taskIds: [], songs: [], paid: false, chosenIndex: 0 });
 
     const lyrics = buildLyrics(formData);
-    const style = (formData.estilo || 'pop').split(' ')[0].toLowerCase();
-    const mood  = (formData.clima  || 'emotional').split(' ')[0].toLowerCase();
-    const title = 'Musica para ' + formData.nome_p;
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
 
+    const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true } };
+    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true } };
+
     const [r1, r2] = await Promise.all([
-      axios.post('https://api.apiframe.ai/v2/music/generate', {
-        model: 'suno',
-        prompt: lyrics,
-        title: title,
-        tags: style + ', ' + mood + ', portuguese, brazil, personalized'
-      }, { headers }),
-      axios.post('https://api.apiframe.ai/v2/music/generate', {
-        model: 'suno',
-        prompt: lyrics,
-        title: title + ' alternativa',
-        tags: style + ', ' + mood + ', portuguese, brazil, ballad'
-      }, { headers })
+      axios.post('https://api.apiframe.ai/v2/music/generate', body1, { headers }),
+      axios.post('https://api.apiframe.ai/v2/music/generate', body2, { headers })
     ]);
 
-    const taskIds = [r1.data?.jobId, r2.data?.jobId].filter(Boolean);
+    const taskIds = [r1.data && r1.data.jobId, r2.data && r2.data.jobId].filter(Boolean);
     sessions.get(sessionId).taskIds = taskIds;
-    res.json({ sessionId, taskIds });
+    res.json({ sessionId: sessionId, taskIds: taskIds });
   } catch (err) {
-    console.error('Erro generate:', err.response?.data || err.message);
+    console.error('Erro generate:', err.response && err.response.data || err.message);
     res.status(500).json({ error: 'Erro ao iniciar geracao.' });
   }
 });
@@ -98,7 +78,7 @@ app.get('/api/status/:sessionId', async (req, res) => {
   if (session.songs.length >= 1) {
     return res.json({
       status: 'done',
-      songs: session.songs.slice(0, 2).map((s, i) => ({ index: i, title: s.title }))
+      songs: session.songs.slice(0, 2).map(function(s, i) { return { index: i, title: s.title }; })
     });
   }
 
@@ -106,10 +86,11 @@ app.get('/api/status/:sessionId', async (req, res) => {
     const headers = { 'X-API-Key': APIFRAME_KEY };
     const allSongs = [];
 
-    for (const jobId of session.taskIds) {
-      const r = await axios.get('https://api.apiframe.ai/v2/jobs/' + jobId, { headers });
-      if (r.data?.status === 'COMPLETED' && r.data?.result?.tracks) {
-        r.data.result.tracks.forEach(track => {
+    for (var i = 0; i < session.taskIds.length; i++) {
+      var jobId = session.taskIds[i];
+      var r = await axios.get('https://api.apiframe.ai/v2/jobs/' + jobId, { headers: headers });
+      if (r.data && r.data.status === 'COMPLETED' && r.data.result && r.data.result.tracks) {
+        r.data.result.tracks.forEach(function(track) {
           if (track.audioUrl) allSongs.push({ title: track.title || 'Versao', url: track.audioUrl });
         });
       }
@@ -119,7 +100,7 @@ app.get('/api/status/:sessionId', async (req, res) => {
       session.songs = allSongs.slice(0, 2);
       return res.json({
         status: 'done',
-        songs: session.songs.map((s, i) => ({ index: i, title: s.title }))
+        songs: session.songs.map(function(s, i) { return { index: i, title: s.title }; })
       });
     }
     res.json({ status: 'processing' });
@@ -129,7 +110,8 @@ app.get('/api/status/:sessionId', async (req, res) => {
 });
 
 app.post('/api/payment', async (req, res) => {
-  const { sessionId, chosenIndex } = req.body;
+  const sessionId = req.body.sessionId;
+  const chosenIndex = req.body.chosenIndex;
   const session = sessions.get(sessionId);
   if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
   session.chosenIndex = chosenIndex;
@@ -156,48 +138,51 @@ app.post('/api/payment', async (req, res) => {
 
 app.post('/api/webhook', async (req, res) => {
   res.sendStatus(200);
-  const { type, data } = req.body;
-  if (type !== 'payment' || !data?.id) return;
+  var type = req.body.type;
+  var data = req.body.data;
+  if (type !== 'payment' || !data || !data.id) return;
   try {
     const payment = new Payment(mpClient);
     const paymentData = await payment.get({ id: data.id });
     if (paymentData.status === 'approved' && paymentData.external_reference) {
-      const [sessionId, idx] = paymentData.external_reference.split(':');
-      const session = sessions.get(sessionId);
+      var parts = paymentData.external_reference.split(':');
+      var sid = parts[0];
+      var idx = parts[1];
+      var session = sessions.get(sid);
       if (session) { session.paid = true; session.chosenIndex = parseInt(idx) || 0; }
     }
   } catch (err) {}
 });
 
-app.get('/api/check/:sessionId', (req, res) => {
-  const session = sessions.get(req.params.sessionId);
+app.get('/api/check/:sessionId', function(req, res) {
+  var session = sessions.get(req.params.sessionId);
   res.json({ paid: session ? session.paid : false });
 });
 
 app.get('/api/stream/:sessionId/:index', async (req, res) => {
-  const session = sessions.get(req.params.sessionId);
+  var session = sessions.get(req.params.sessionId);
   if (!session || !session.songs.length) return res.status(404).end();
-  const song = session.songs[parseInt(req.params.index) || 0];
-  if (!song?.url) return res.status(404).end();
+  var song = session.songs[parseInt(req.params.index) || 0];
+  if (!song || !song.url) return res.status(404).end();
   try {
-    const response = await axios.get(song.url, { responseType: 'stream' });
+    var response = await axios.get(song.url, { responseType: 'stream' });
     res.setHeader('Content-Type', 'audio/mpeg');
     response.data.pipe(res);
   } catch(err) { res.status(500).end(); }
 });
 
-app.get('/api/download/:sessionId', (req, res) => {
-  const session = sessions.get(req.params.sessionId);
+app.get('/api/download/:sessionId', function(req, res) {
+  var session = sessions.get(req.params.sessionId);
   if (!session) return res.status(404).json({ error: 'Nao encontrado' });
   if (!session.paid) return res.status(403).json({ error: 'Pagamento nao confirmado' });
-  const song = session.songs[session.chosenIndex] || session.songs[0];
+  var song = session.songs[session.chosenIndex] || session.songs[0];
   if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
   res.json({ url: song.url, title: song.title });
 });
 
-app.get('/sucesso', (req, res) => {
+app.get('/sucesso', function(req, res) {
   res.sendFile(path.join(__dirname, 'public', 'sucesso.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('Servidor rodando na porta ' + PORT));
+var PORT = process.env.PORT || 3000;
+app.listen(PORT, function() { console.log('Servidor rodando na porta ' + PORT); });
