@@ -1,4 +1,4 @@
-require('dotenv').config();// v2 fixed
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const { MercadoPagoConfig, Preference, Payment } = require('mercadopago');
@@ -15,50 +15,46 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const PRECO = 27;
 
 const mpClient = new MercadoPagoConfig({ accessToken: MP_TOKEN });
-
-// Armazenamento em memória
 const sessions = new Map();
 
-// ─── GERA LETRA PERSONALIZADA ─────────────────────────────
 function buildLyrics(d) {
   const sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
   const estilo = (d.estilo || 'Pop').split(' ')[0];
-  const clima = (d.clima || 'Romântico').split(' ')[0];
+  const clima = (d.clima || 'Romantico').split(' ')[0];
   const ref = d.ref ? `, estilo ${d.ref}` : '';
   return `[Estilo: ${estilo}, ${clima}${ref}]
 
 [Verso 1]
-${d.nome_p}, você é ${d.palavras || 'especial e única'}
+${d.nome_p}, voce e ${d.palavras || 'especial e unica'}
 ${d.frase ? '"' + d.frase + '"\n' : ''}${d.memoria ? d.memoria.substring(0, 80) : 'Lembro de cada momento ao seu lado'}
 
-[Pré-refrão]
-${d.especial ? d.especial.substring(0, 60) : 'Essa história que construímos juntos'}
-É o que me faz ter certeza do que sinto
+[Pre-refrao]
+${d.especial ? d.especial.substring(0, 60) : 'Essa historia que construimos juntos'}
+E o que me faz ter certeza do que sinto
 
-[Refrão]
-${d.nome_p}, essa música é pra você
-Feita com o amor que ${d.relacao || 'alguém especial'} tem
-${d.ocasiao ? d.ocasiao.split(' ')[0] + ' — ' : ''}Que esse momento fique pra sempre
-No coração, na memória, em mim
+[Refrao]
+${d.nome_p}, essa musica e pra voce
+Feita com o amor que ${d.relacao || 'alguem especial'} tem
+${d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : ''}Que esse momento fique pra sempre
+No coracao, na memoria, em mim
 
 [Verso 2]
-${sentir ? 'Quero que você possa ' + sentir.split(',')[0].toLowerCase() : 'Cada nota guarda um pedaço nosso'}
+${sentir ? 'Quero que voce possa ' + sentir.split(',')[0].toLowerCase() : 'Cada nota guarda um pedaco nosso'}
 ${d.especial ? d.especial.substring(0, 50) : 'Cada verso fala do que vivemos'}
-Essa canção nasceu do fundo da alma
-Um presente que não tem igual
+Essa cancao nasceu do fundo da alma
+Um presente que nao tem igual
 
-[Refrão]
-${d.nome_p}, essa música é pra você
-Feita com o amor que ${d.relacao || 'alguém especial'} tem
-${d.ocasiao ? d.ocasiao.split(' ')[0] + ' — ' : ''}Que esse momento fique pra sempre
-No coração, na memória, em mim
+[Refrao]
+${d.nome_p}, essa musica e pra voce
+Feita com o amor que ${d.relacao || 'alguem especial'} tem
+${d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : ''}Que esse momento fique pra sempre
+No coracao, na memoria, em mim
 
 [Outro]
-${d.nome_p}... essa canção é só sua
-Criada com amor, do fundo do coração`;
+${d.nome_p}... essa cancao e so sua
+Criada com amor, do fundo do coracao`;
 }
 
-// ─── GERA MÚSICAS ─────────────────────────────────────────
 app.post('/api/generate', async (req, res) => {
   try {
     const formData = req.body;
@@ -68,42 +64,36 @@ app.post('/api/generate', async (req, res) => {
     const lyrics = buildLyrics(formData);
     const style = (formData.estilo || 'pop').split(' ')[0].toLowerCase();
     const mood  = (formData.clima  || 'emotional').split(' ')[0].toLowerCase();
-    const title = `Música para ${formData.nome_p}`;
-
+    const title = 'Musica para ' + formData.nome_p;
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
 
-    // 2 chamadas → 4 músicas → mostramos 3
     const [r1, r2] = await Promise.all([
       axios.post('https://api.apiframe.ai/v2/music/generate', {
         model: 'suno',
         prompt: lyrics,
-        customMode: true,
-        title,
-        tags: `${style}, ${mood}, portuguese, brazil, personalized`
+        title: title,
+        tags: style + ', ' + mood + ', portuguese, brazil, personalized'
       }, { headers }),
       axios.post('https://api.apiframe.ai/v2/music/generate', {
         model: 'suno',
         prompt: lyrics,
-        customMode: true,
-        title: title + ' (alternativa)',
-        tags: `${style}, ${mood}, portuguese, brazil, ballad, alternative`
+        title: title + ' alternativa',
+        tags: style + ', ' + mood + ', portuguese, brazil, ballad'
       }, { headers })
     ]);
 
     const taskIds = [r1.data?.jobId, r2.data?.jobId].filter(Boolean);
     sessions.get(sessionId).taskIds = taskIds;
-
     res.json({ sessionId, taskIds });
   } catch (err) {
     console.error('Erro generate:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Erro ao iniciar geração. Verifique sua chave Apiframe.' });
+    res.status(500).json({ error: 'Erro ao iniciar geracao.' });
   }
 });
 
-// ─── STATUS DA GERAÇÃO ────────────────────────────────────
 app.get('/api/status/:sessionId', async (req, res) => {
   const session = sessions.get(req.params.sessionId);
-  if (!session) return res.status(404).json({ error: 'Sessão não encontrada' });
+  if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
 
   if (session.songs.length >= 1) {
     return res.json({
@@ -113,14 +103,14 @@ app.get('/api/status/:sessionId', async (req, res) => {
   }
 
   try {
-    const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
+    const headers = { 'X-API-Key': APIFRAME_KEY };
     const allSongs = [];
 
     for (const jobId of session.taskIds) {
-      const r = await axios.get(`https://api.apiframe.ai/v2/jobs/${jobId}`, { headers });
+      const r = await axios.get('https://api.apiframe.ai/v2/jobs/' + jobId, { headers });
       if (r.data?.status === 'COMPLETED' && r.data?.result?.tracks) {
         r.data.result.tracks.forEach(track => {
-          if (track.audioUrl) allSongs.push({ title: track.title || 'Versão', url: track.audioUrl });
+          if (track.audioUrl) allSongs.push({ title: track.title || 'Versao', url: track.audioUrl });
         });
       }
     }
@@ -132,117 +122,82 @@ app.get('/api/status/:sessionId', async (req, res) => {
         songs: session.songs.map((s, i) => ({ index: i, title: s.title }))
       });
     }
-
     res.json({ status: 'processing' });
   } catch (err) {
-    console.error('Erro status:', err.message);
     res.json({ status: 'processing' });
   }
 });
 
-// ─── CRIAR PAGAMENTO ──────────────────────────────────────
 app.post('/api/payment', async (req, res) => {
   const { sessionId, chosenIndex } = req.body;
   const session = sessions.get(sessionId);
-  if (!session) return res.status(404).json({ error: 'Sessão não encontrada' });
-
+  if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
   session.chosenIndex = chosenIndex;
-
   try {
     const preference = new Preference(mpClient);
     const result = await preference.create({
       body: {
-        items: [{
-          id: sessionId,
-          title: `Música Personalizada — ${session.formData.nome_p}`,
-          quantity: 1,
-          unit_price: PRECO,
-          currency_id: 'BRL'
-        }],
+        items: [{ id: sessionId, title: 'Musica Personalizada', quantity: 1, unit_price: PRECO, currency_id: 'BRL' }],
         back_urls: {
-          success: `${BASE_URL}/sucesso?session=${sessionId}`,
-          failure: `${BASE_URL}/?erro=1`,
-          pending: `${BASE_URL}/sucesso?session=${sessionId}`
+          success: BASE_URL + '/sucesso?session=' + sessionId,
+          failure: BASE_URL + '/?erro=1',
+          pending: BASE_URL + '/sucesso?session=' + sessionId
         },
         auto_approve: true,
-        notification_url: `${BASE_URL}/api/webhook`,
-        external_reference: `${sessionId}:${chosenIndex}`
+        notification_url: BASE_URL + '/api/webhook',
+        external_reference: sessionId + ':' + chosenIndex
       }
     });
-
     res.json({ checkoutUrl: result.init_point });
   } catch (err) {
-    console.error('Erro payment:', err.response?.data || err.message);
     res.status(500).json({ error: 'Erro ao criar pagamento.' });
   }
 });
 
-// ─── WEBHOOK MERCADO PAGO ─────────────────────────────────
 app.post('/api/webhook', async (req, res) => {
   res.sendStatus(200);
   const { type, data } = req.body;
   if (type !== 'payment' || !data?.id) return;
-
   try {
     const payment = new Payment(mpClient);
     const paymentData = await payment.get({ id: data.id });
-
     if (paymentData.status === 'approved' && paymentData.external_reference) {
       const [sessionId, idx] = paymentData.external_reference.split(':');
       const session = sessions.get(sessionId);
-      if (session) {
-        session.paid = true;
-        session.chosenIndex = parseInt(idx) || 0;
-        console.log(`✅ Pagamento aprovado — sessão ${sessionId}`);
-      }
+      if (session) { session.paid = true; session.chosenIndex = parseInt(idx) || 0; }
     }
-  } catch (err) {
-    console.error('Erro webhook:', err.message);
-  }
+  } catch (err) {}
 });
 
-// ─── VERIFICAR PAGAMENTO ──────────────────────────────────
 app.get('/api/check/:sessionId', (req, res) => {
   const session = sessions.get(req.params.sessionId);
-  if (!session) return res.json({ paid: false });
-  res.json({ paid: session.paid });
+  res.json({ paid: session ? session.paid : false });
 });
 
-// ─── STREAM PROTEGIDO (sem expor URL) ────────────────────
 app.get('/api/stream/:sessionId/:index', async (req, res) => {
   const session = sessions.get(req.params.sessionId);
   if (!session || !session.songs.length) return res.status(404).end();
-
-  const idx = parseInt(req.params.index) || 0;
-  const song = session.songs[idx];
+  const song = session.songs[parseInt(req.params.index) || 0];
   if (!song?.url) return res.status(404).end();
-
   try {
     const response = await axios.get(song.url, { responseType: 'stream' });
     res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Accept-Ranges', 'bytes');
     response.data.pipe(res);
-  } catch(err) {
-    res.status(500).end();
-  }
+  } catch(err) { res.status(500).end(); }
 });
 
-// ─── DOWNLOAD APÓS PAGAMENTO ──────────────────────────────
 app.get('/api/download/:sessionId', (req, res) => {
   const session = sessions.get(req.params.sessionId);
-  if (!session) return res.status(404).json({ error: 'Sessão não encontrada' });
-  if (!session.paid) return res.status(403).json({ error: 'Pagamento não confirmado' });
-
+  if (!session) return res.status(404).json({ error: 'Nao encontrado' });
+  if (!session.paid) return res.status(403).json({ error: 'Pagamento nao confirmado' });
   const song = session.songs[session.chosenIndex] || session.songs[0];
-  if (!song) return res.status(404).json({ error: 'Música não encontrada' });
-
+  if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
   res.json({ url: song.url, title: song.title });
 });
 
-// ─── PÁGINA DE SUCESSO ────────────────────────────────────
 app.get('/sucesso', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sucesso.html'));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🎵 Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log('Servidor rodando na porta ' + PORT));
