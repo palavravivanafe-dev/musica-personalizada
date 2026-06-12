@@ -61,7 +61,7 @@ app.post('/api/generate', async (req, res) => {
     const mood  = (formData.clima  || 'emotional').split(' ')[0].toLowerCase();
     const title = `Música para ${formData.nome_p}`;
 
-    const headers = { 'Authorization': APIFRAME_KEY, 'Content-Type': 'application/json' };
+    const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
 
     // 2 chamadas → 4 músicas → mostramos 3
     const [r1, r2] = await Promise.all([
@@ -104,7 +104,7 @@ app.get('/api/status/:sessionId', async (req, res) => {
   }
 
   try {
-    const headers = { 'Authorization': APIFRAME_KEY, 'Content-Type': 'application/json' };
+    const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
     const allSongs = [];
 
     for (const taskId of session.taskIds) {
