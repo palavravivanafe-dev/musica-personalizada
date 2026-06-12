@@ -17,32 +17,74 @@ const PRECO = 27;
 const mpClient = new MercadoPagoConfig({ accessToken: MP_TOKEN });
 const sessions = new Map();
 
+function getStyleTags(d) {
+  var estiloMap = {
+    'Sertanejo': 'sertanejo universitario, violao, guitarra country, voz masculina brasileira, emocional',
+    'Pop': 'pop brasileiro moderno, piano, bateria, producao moderna, romantico',
+    'Gospel': 'gospel brasileiro, piano, coral evangelico, voz poderosa, espiritual',
+    'Pagode': 'pagode romantico, cavaquinho, pandeiro, tamborim, voz masculina',
+    'MPB': 'MPB brasileira, violao acustico, voz suave, letra poetica',
+    'Funk': 'funk melody brasileiro, batida eletronica, voz jovem',
+    'Rock': 'rock nacional brasileiro, guitarra eletrica, bateria pesada',
+    'Balada': 'balada romantica, piano, cordas, orquestra, cinematografico'
+  };
+  var climaMap = {
+    'Alegre': 'alegre, animado, celebracao, feliz',
+    'Emocionante': 'emocional, tocante, profundo, lagrimas de alegria',
+    'Romantico': 'romantico, apaixonado, amor verdadeiro, intimidade',
+    'Espiritual': 'espiritual, fe, gratidao, louvor'
+  };
+  var estilo = (d.estilo || 'Pop').split(' ')[0];
+  var clima = (d.clima || 'Romantico').split(' ')[0];
+  var tags = estiloMap[estilo] || (estilo.toLowerCase() + ', brasileiro');
+  tags += ', ' + (climaMap[clima] || clima.toLowerCase());
+  if (d.ref) tags += ', influencia de ' + d.ref;
+  return tags;
+}
+
 function buildLyrics(d) {
-  const sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
-  const estilo = (d.estilo || 'Pop').split(' ')[0];
-  const clima = (d.clima || 'Romantico').split(' ')[0];
-  return '[Estilo: ' + estilo + ', ' + clima + ']\n\n[Verso 1]\n' +
-    d.nome_p + ', voce e ' + (d.palavras || 'especial') + '\n' +
-    (d.frase ? '"' + d.frase + '"\n' : '') +
-    (d.memoria ? d.memoria.substring(0, 80) : 'Cada momento ao seu lado') + '\n\n' +
-    '[Pre-refrao]\n' +
-    (d.especial ? d.especial.substring(0, 60) : 'Essa historia que construimos') + '\n' +
-    'E o que me faz ter certeza\n\n' +
-    '[Refrao]\n' +
-    d.nome_p + ', essa musica e pra voce\n' +
-    'Feita com amor de ' + (d.relacao || 'alguem especial') + '\n' +
-    (d.ocasiao ? d.ocasiao.split(' ')[0] + ' -- ' : '') + 'Que fique pra sempre\n' +
-    'No coracao, na memoria\n\n' +
-    '[Verso 2]\n' +
-    (sentir ? 'Quero que voce possa ' + sentir.split(',')[0].toLowerCase() : 'Cada nota guarda um pedaco nosso') + '\n' +
-    'Essa cancao nasceu do fundo da alma\n' +
-    'Um presente que nao tem igual\n\n' +
-    '[Refrao]\n' +
-    d.nome_p + ', essa musica e pra voce\n' +
-    'Feita com amor de ' + (d.relacao || 'alguem especial') + '\n' +
-    'Que fique pra sempre no coracao\n\n' +
-    '[Outro]\n' +
-    d.nome_p + '... essa cancao e so sua';
+  var sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
+  var nome = d.nome_p || 'voce';
+  var relacao = d.relacao || 'alguem especial';
+  var palavras = d.palavras || 'incrivel e especial';
+  var memoria = d.memoria ? d.memoria.substring(0, 120) : 'cada momento especial que vivemos juntos';
+  var frase = d.frase || '';
+  var especial = d.especial ? d.especial.substring(0, 80) : '';
+  var ocasiao = d.ocasiao ? d.ocasiao.split(' ')[0] : '';
+
+  var v = '[Verse 1]\n';
+  v += nome + ', ' + relacao + ' quer te dizer\n';
+  v += 'Que voce e ' + palavras.split(',')[0].trim() + ' de um jeito que nao tem igual\n';
+  if (frase) v += '"' + frase + '"\n';
+  v += memoria + '\n\n';
+
+  v += '[Pre-Chorus]\n';
+  v += (especial ? especial : 'Cada detalhe da nossa historia') + '\n';
+  v += 'Me faz ter certeza do que sinto por voce\n\n';
+
+  v += '[Chorus]\n';
+  v += nome + ', essa musica e so sua\n';
+  v += 'Feita com o amor que ' + relacao + ' tem\n';
+  v += (ocasiao ? 'Neste ' + ocasiao + ' quero que voce saiba\n' : 'Quero que voce saiba\n');
+  v += 'Que voce e a melhor parte da minha vida\n\n';
+
+  v += '[Verse 2]\n';
+  v += (sentir ? 'Quero que ao ouvir isso voce possa ' + sentir.split(',')[0].toLowerCase() + '\n' : 'Cada nota carrega um pedaco do nosso amor\n');
+  v += 'Voce e ' + (palavras.split(',')[1] ? palavras.split(',')[1].trim() : palavras.split(',')[0].trim()) + ' e muito mais\n';
+  v += 'Esse presente vem do fundo do coracao\n';
+  v += 'Um amor que nao tem como explicar\n\n';
+
+  v += '[Chorus]\n';
+  v += nome + ', essa musica e so sua\n';
+  v += 'Feita com o amor que ' + relacao + ' tem\n';
+  v += (ocasiao ? 'Neste ' + ocasiao + ' quero que voce saiba\n' : 'Quero que voce saiba\n');
+  v += 'Que voce e a melhor parte da minha vida\n\n';
+
+  v += '[Outro]\n';
+  v += nome + '... essa cancao nasceu pra voce\n';
+  v += 'Com todo amor, de ' + relacao;
+
+  return v;
 }
 
 app.post('/api/generate', async (req, res) => {
@@ -52,10 +94,12 @@ app.post('/api/generate', async (req, res) => {
     sessions.set(sessionId, { formData, taskIds: [], songs: [], paid: false, chosenIndex: 0 });
 
     const lyrics = buildLyrics(formData);
+    const styleTags = getStyleTags(formData);
+    const songTitle = 'Musica para ' + (formData.nome_p || 'voce');
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
 
-    const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true } };
-    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true } };
+    const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, style: styleTags, title: songTitle } };
+    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, style: styleTags, title: songTitle + ' v2' } };
 
     const [r1, r2] = await Promise.all([
       axios.post('https://api.apiframe.ai/v2/music/generate', body1, { headers }),
