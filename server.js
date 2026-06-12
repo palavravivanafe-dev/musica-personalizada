@@ -65,14 +65,14 @@ app.post('/api/generate', async (req, res) => {
 
     // 2 chamadas → 4 músicas → mostramos 3
     const [r1, r2] = await Promise.all([
-      axios.post('https://api.apiframe.ai/suno-music', {
+      axios.post('https://api.apiframe.ai/v2/suno-music', {
         prompt: `${style}, ${mood}, música em português do Brasil, melodia emotiva`,
         lyric: lyrics,
         custom_mode: true,
         title,
         tags: `${style}, ${mood}, portuguese, brazil, personalized`
       }, { headers }),
-      axios.post('https://api.apiframe.ai/suno-music', {
+      axios.post('https://api.apiframe.ai/v2/suno-music', {
         prompt: `${style}, ${mood}, música em português do Brasil, versão alternativa`,
         lyric: lyrics,
         custom_mode: true,
@@ -108,7 +108,7 @@ app.get('/api/status/:sessionId', async (req, res) => {
     const allSongs = [];
 
     for (const taskId of session.taskIds) {
-      const r = await axios.post('https://api.apiframe.ai/fetch', { task_id: taskId }, { headers });
+      const r = await axios.post('https://api.apiframe.ai/v2/fetch', { task_id: taskId }, { headers });
       if (r.data?.status === 'done' && r.data?.output) {
         const clips = Array.isArray(r.data.output) ? r.data.output : [r.data.output];
         clips.forEach(clip => {
