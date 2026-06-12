@@ -65,23 +65,23 @@ app.post('/api/generate', async (req, res) => {
 
     // 2 chamadas → 4 músicas → mostramos 3
     const [r1, r2] = await Promise.all([
-      axios.post('https://api.apiframe.ai/v2/suno-music', {
-        prompt: `${style}, ${mood}, música em português do Brasil, melodia emotiva`,
-        lyric: lyrics,
-        custom_mode: true,
+      axios.post('https://api.apiframe.ai/v2/music/generate', {
+        model: 'suno',
+        prompt: lyrics,
+        customMode: true,
         title,
         tags: `${style}, ${mood}, portuguese, brazil, personalized`
       }, { headers }),
-      axios.post('https://api.apiframe.ai/v2/suno-music', {
-        prompt: `${style}, ${mood}, música em português do Brasil, versão alternativa`,
-        lyric: lyrics,
-        custom_mode: true,
+      axios.post('https://api.apiframe.ai/v2/music/generate', {
+        model: 'suno',
+        prompt: lyrics,
+        customMode: true,
         title: title + ' (alternativa)',
-        tags: `${style}, ${mood}, portuguese, brazil, ballad`
+        tags: `${style}, ${mood}, portuguese, brazil, ballad, alternative`
       }, { headers })
     ]);
 
-    const taskIds = [r1.data?.task_id, r2.data?.task_id].filter(Boolean);
+    const taskIds = [r1.data?.jobId, r2.data?.jobId].filter(Boolean);
     sessions.get(sessionId).taskIds = taskIds;
 
     res.json({ sessionId, taskIds });
@@ -107,12 +107,11 @@ app.get('/api/status/:sessionId', async (req, res) => {
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
     const allSongs = [];
 
-    for (const taskId of session.taskIds) {
-      const r = await axios.post('https://api.apiframe.ai/v2/fetch', { task_id: taskId }, { headers });
-      if (r.data?.status === 'done' && r.data?.output) {
-        const clips = Array.isArray(r.data.output) ? r.data.output : [r.data.output];
-        clips.forEach(clip => {
-          if (clip.audio_url) allSongs.push({ title: clip.title || 'Versão', url: clip.audio_url });
+    for (const jobId of session.taskIds) {
+      const r = await axios.get(`https://api.apiframe.ai/v2/jobs/${jobId}`, { headers });
+      if (r.data?.status === 'COMPLETED' && r.data?.result?.tracks) {
+        r.data.result.tracks.forEach(track => {
+          if (track.audioUrl) allSongs.push({ title: track.title || 'Versão', url: track.audioUrl });
         });
       }
     }
