@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagamento Confirmado 🎵</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--roxo:#2D1B69;--rosa:#C4386B;--cinza:#3D3D3D;--cinza-l:#F8F7FF}
+body{font-family:'DM Sans',sans-serif;color:var(--cinza);background:var(--cinza-l);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.container{max-width:480px;width:100%;background:#fff;border-radius:20px;border:1px solid #E8E4FF;overflow:hidden}
+.header{background:var(--roxo);padding:32px 24px;text-align:center}
+.icon{font-size:56px;margin-bottom:12px}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;font-weight:600;margin-bottom:8px}
+.header p{font-size:13px;color:rgba(255,255,255,.7)}
+.body{padding:28px 24px}
+.status-box{background:var(--cinza-l);border:1.5px solid #E0DAFA;border-radius:12px;padding:16px;margin-bottom:20px;text-align:center}
+.spinner{width:40px;height:40px;border:3px solid #E0DAFA;border-top-color:var(--roxo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-download{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--roxo);color:#fff;border:none;border-radius:99px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;margin-bottom:8px;transition:opacity .15s}
+.btn-download:hover{opacity:.88}
+.btn-download.disabled{opacity:.5;pointer-events:none}
+.info{font-size:12px;color:#aaa;text-align:center;line-height:1.6}
+.steps{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.step-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--cinza)}
+.step-item .check{width:22px;height:22px;border-radius:50%;background:#E8FFE8;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="icon">🎵</div>
+    <h1>Pagamento Confirmado!</h1>
+    <p>Sua música personalizada está pronta para download</p>
+  </div>
+  <div class="body">
+    <div class="steps">
+      <div class="step-item"><div class="check">✅</div><span>Pagamento aprovado pelo Mercado Pago</span></div>
+      <div class="step-item"><div class="check">✅</div><span>Música personalizada gerada com IA</span></div>
+      <div class="step-item"><div class="check">✅</div><span>Download disponível abaixo</span></div>
+    </div>
+
+    <div class="status-box" id="status-box">
+      <div class="spinner" id="spinner"></div>
+      <p id="status-msg" style="font-size:13px;color:#888">Verificando pagamento<span id="dots"></span></p>
+    </div>
+
+    <a class="btn-download disabled" id="btn-download" href="#" download>
+      💾 Baixar minha música
+    </a>
+    <p class="info">Arquivo MP3 de alta qualidade · Use como quiser, para sempre</p>
+  </div>
+</div>
+
+<script>
+// Meta Pixel
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2100902017041343');
+fbq('track','Purchase',{value:27,currency:'BRL'});
+
+const params = new URLSearchParams(window.location.search);
+const sessionId = params.get('session');
+const dotsEl = document.getElementById('dots');
+let dotCount = 0;
+setInterval(() => { dotCount=(dotCount+1)%4; dotsEl.textContent='.'.repeat(dotCount); }, 500);
+
+async function verificarPagamento(tentativas=0) {
+  if (!sessionId) {
+    document.getElementById('status-msg').textContent = 'Sessão inválida. Contate o suporte.';
+    return;
+  }
+
+  if (tentativas > 20) {
+    document.getElementById('status-msg').textContent = 'Aguardando confirmação do pagamento. Se já pagou, aguarde alguns minutos e recarregue a página.';
+    document.getElementById('spinner').style.display = 'none';
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/check/'+sessionId);
+    const data = await res.json();
+
+    if (data.paid) {
+      // Buscar URL de download
+      const dl = await fetch('/api/download/'+sessionId);
+      const dlData = await dl.json();
+
+      if (dlData.url) {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('status-msg').textContent = '✅ Pronto! Clique para baixar sua música.';
+        document.getElementById('status-box').style.background = '#E8FFE8';
+        document.getElementById('status-box').style.borderColor = '#4CAF50';
+
+        const btn = document.getElementById('btn-download');
+        btn.href = dlData.url;
+        btn.download = (dlData.title || 'musica-personalizada') + '.mp3';
+        btn.classList.remove('disabled');
+        btn.style.background = '#C4386B';
+      }
+    } else {
+      setTimeout(() => verificarPagamento(tentativas+1), 3000);
+    }
+  } catch(err) {
+    setTimeout(() => verificarPagamento(tentativas+1), 3000);
+  }
+}
+
+verificarPagamento();
+</script>
+</body>
+</html>
