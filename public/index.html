@@ -89,8 +89,12 @@ body{font-family:'DM Sans',sans-serif;color:var(--cinza);background:var(--cinza-
 .song-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .song-num{width:28px;height:28px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
 .song-card.selected .song-num{background:var(--rosa)}
-.song-title{font-size:14px;font-weight:500;color:var(--cinza)}
-.song-card audio{width:100%;height:36px;border-radius:8px;outline:none}
+.song-title{font-size:14px;font-weight:500;color:var(--cinza);flex:1}
+.song-select-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;border:2px solid #E0DAFA;background:#fff;font-size:12px;font-weight:600;color:#aaa;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;font-family:"DM Sans",sans-serif}
+.song-select-btn:hover{border-color:var(--rosa);color:var(--rosa)}
+.song-card.selected .song-select-btn{border-color:var(--rosa);background:var(--rosa);color:#fff}
+.song-card.selected{border-color:var(--rosa);background:#FFF0F5}
+.song-card audio{width:100%;height:36px;border-radius:8px;outline:none;display:block}
 .song-card audio::-webkit-media-controls-panel{background:var(--roxo-l)}
 
 .btn-pay{display:block;width:100%;background:var(--rosa);color:#fff;border:none;border-radius:99px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;margin-top:4px;text-align:center}
@@ -189,6 +193,7 @@ body{font-family:'DM Sans',sans-serif;color:var(--cinza);background:var(--cinza-
             <div class="radio-opt"><input type="radio" name="estilo" id="es6" value="Funk 🎤"><label for="es6"><span class="em">🎤</span>Funk</label></div>
             <div class="radio-opt"><input type="radio" name="estilo" id="es7" value="Rock 🎸"><label for="es7"><span class="em">🎸</span>Rock</label></div>
             <div class="radio-opt"><input type="radio" name="estilo" id="es8" value="Balada 🎹"><label for="es8"><span class="em">🎹</span>Balada</label></div>
+            <div class="radio-opt"><input type="radio" name="estilo" id="es9" value="Reggae 🌿"><label for="es9"><span class="em">🌿</span>Reggae</label></div>
           </div>
         </div>
         <div class="field">
@@ -391,6 +396,9 @@ function mostrarMusicas(songs) {
       <div class="song-card-header">
         <div class="song-num">${i+1}</div>
         <span class="song-title">${song.title || 'Versão '+(i+1)}</span>
+        <button class="song-select-btn" id="btn-sel-${i}" onclick="event.stopPropagation();selecionarMusica(${i})">
+          ✓ Escolher
+        </button>
       </div>
       <audio controls controlsList="nodownload" oncontextmenu="return false" src="/api/stream/${sessionId}/${i}">
         Seu navegador não suporta áudio.
@@ -403,10 +411,14 @@ function mostrarMusicas(songs) {
 
 function selecionarMusica(index) {
   document.querySelectorAll('.song-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.song-select-btn').forEach(b => b.textContent = '✓ Escolher');
   document.getElementById('card-'+index)?.classList.add('selected');
+  var selBtn = document.getElementById('btn-sel-'+index);
+  if (selBtn) selBtn.textContent = '✅ Selecionada!';
   chosenIndex = index;
   document.getElementById('btn-pay').disabled = false;
-  document.getElementById('btn-pay').textContent = `🔒 Pagar R$27 e baixar a Versão ${index+1}`;
+  document.getElementById('btn-pay').textContent = '🔒 Pagar R$27 e baixar a Versão '+(index+1);
+  document.getElementById('btn-pay').scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
 async function pagar() {
