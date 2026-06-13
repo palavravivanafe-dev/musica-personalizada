@@ -66,6 +66,12 @@ function getStyleTags(d) {
       'Alegre':      'Uplifting rock anthem, energetic guitars, live drums, positive atmosphere, powerful vocals, stadium-ready chorus, modern rock production',
       'Espiritual':  'Emotional rock ballad, electric guitars, live drums, cinematic atmosphere, passionate male vocal, soaring chorus, powerful emotional performance'
     },
+    'Reggae': {
+      'Romantico':   'Brazilian reggae roots, romantic and smooth, reggae rhythm guitar, bass-driven groove, warm vocals, laid-back atmosphere, love song feeling, roots reggae style',
+      'Alegre':      'Upbeat Brazilian reggae, positive reggae vibes, dancehall influence, energetic rhythm guitar, happy atmosphere, feel-good vocals, summer feeling',
+      'Emocionante': 'Emotional reggae ballad, deep roots reggae, soulful vocals, heavy bass, touching lyrics, spiritual and emotional atmosphere, reggae romantico brasileiro',
+      'Espiritual':  'Spiritual reggae roots, rastafari influence, gospel reggae, uplifting message, warm bass, choir harmonies, faith and love combined'
+    },
     'Balada': {
       'Romantico':   'Cinematic romantic ballad, emotional piano, orchestral strings, heartfelt vocal, intimate atmosphere, wedding song feeling, powerful emotional chorus',
       'Emocionante': 'Emotional cinematic ballad, piano, strings, touching vocal performance, deep emotional atmosphere, movie soundtrack quality, heartfelt lyrics',
