@@ -135,8 +135,9 @@ app.post('/api/generate', async (req, res) => {
     const songTitle = 'Musica para ' + (formData.nome_p || 'voce');
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
 
-    const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, style: styleTags, title: songTitle } };
-    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, style: styleTags, title: songTitle + ' v2' } };
+    var vocalGender = formData.clima && formData.clima.includes('Espiritual') ? 'f' : 'm';
+    const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, model_version: 'V5_5', style: styleTags, title: songTitle, vocal_gender: vocalGender, negative_tags: 'low quality, amateur, noise, distortion' } };
+    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, model_version: 'V5_5', style: styleTags, title: songTitle + ' v2', vocal_gender: vocalGender, negative_tags: 'low quality, amateur, noise, distortion' } };
 
     const [r1, r2] = await Promise.all([
       axios.post('https://api.apiframe.ai/v2/music/generate', body1, { headers }),
