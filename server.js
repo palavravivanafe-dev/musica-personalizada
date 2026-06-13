@@ -13,6 +13,7 @@ const APIFRAME_KEY = process.env.APIFRAME_KEY;
 const MP_TOKEN = process.env.MP_ACCESS_TOKEN;
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const PRECO = 27;
+const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY;
 
 const mpClient = new MercadoPagoConfig({ accessToken: MP_TOKEN });
 const sessions = new Map();
@@ -79,49 +80,38 @@ function getStyleTags(d) {
   return prompt;
 }
 
-function buildLyrics(d) {
-  var sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
+async function buildLyrics(d) {
   var nome = d.nome_p || 'voce';
   var relacao = d.relacao || 'alguem especial';
-  var palavras = d.palavras || 'incrivel e especial';
-  var memoria = d.memoria ? d.memoria.substring(0, 120) : 'cada momento especial que vivemos juntos';
+  var palavras = d.palavras || 'especial';
+  var memoria = d.memoria || '';
   var frase = d.frase || '';
-  var especial = d.especial ? d.especial.substring(0, 80) : '';
-  var ocasiao = d.ocasiao ? d.ocasiao.split(' ')[0] : '';
+  var especial = d.especial || '';
+  var ocasiao = d.ocasiao || '';
+  var estilo = (d.estilo || 'Pop').split(' ')[0];
+  var clima = (d.clima || 'Romantico').split(' ')[0];
+  var sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
 
-  var v = '[Verse 1]\n';
-  v += nome + ', ' + relacao + ' quer te dizer\n';
-  v += 'Que voce e ' + palavras.split(',')[0].trim() + ' de um jeito que nao tem igual\n';
-  if (frase) v += '"' + frase + '"\n';
-  v += memoria + '\n\n';
+  var prompt = 'Voce e um compositor profissional brasileiro especialista em ' + estilo + '. Crie uma letra de musica PROFISSIONAL, EMOCIONAL e RIMADA em portugues brasileiro para uma musica de ' + estilo + ' com clima ' + clima + '.\n\nDados pessoais para personalizar a letra:\n- Nome da pessoa: ' + nome + '\n- Relacao: ' + relacao + '\n- Como ela e: ' + palavras + '\n- Memoria especial: ' + memoria + '\n- Frase ou apelido especial: ' + (frase || 'nenhum') + '\n- Lugar ou coisa especial: ' + (especial || 'nenhum') + '\n- Ocasiao: ' + (ocasiao || 'presente especial') + '\n- Quero que ela sinta: ' + (sentir || 'emocao') + '\n\nINSTRUCOES:\n- Use rimas ricas e naturais\n- Mencione o nome ' + nome + ' na letra\n- Use a memoria especial e detalhes pessoais\n- Formato: [Verse 1], [Pre-Chorus], [Chorus], [Verse 2], [Chorus], [Bridge], [Outro]\n- Cada secao com 4 linhas\n- Letra profissional como Henrique & Juliano, Jorge & Mateus\n- Emocional, romantica, com rimas perfeitas\n- APENAS a letra, sem explicacoes';
 
-  v += '[Pre-Chorus]\n';
-  v += (especial ? especial : 'Cada detalhe da nossa historia') + '\n';
-  v += 'Me faz ter certeza do que sinto por voce\n\n';
-
-  v += '[Chorus]\n';
-  v += nome + ', essa musica e so sua\n';
-  v += 'Feita com o amor que ' + relacao + ' tem\n';
-  v += (ocasiao ? 'Neste ' + ocasiao + ' quero que voce saiba\n' : 'Quero que voce saiba\n');
-  v += 'Que voce e a melhor parte da minha vida\n\n';
-
-  v += '[Verse 2]\n';
-  v += (sentir ? 'Quero que ao ouvir isso voce possa ' + sentir.split(',')[0].toLowerCase() + '\n' : 'Cada nota carrega um pedaco do nosso amor\n');
-  v += 'Voce e ' + (palavras.split(',')[1] ? palavras.split(',')[1].trim() : palavras.split(',')[0].trim()) + ' e muito mais\n';
-  v += 'Esse presente vem do fundo do coracao\n';
-  v += 'Um amor que nao tem como explicar\n\n';
-
-  v += '[Chorus]\n';
-  v += nome + ', essa musica e so sua\n';
-  v += 'Feita com o amor que ' + relacao + ' tem\n';
-  v += (ocasiao ? 'Neste ' + ocasiao + ' quero que voce saiba\n' : 'Quero que voce saiba\n');
-  v += 'Que voce e a melhor parte da minha vida\n\n';
-
-  v += '[Outro]\n';
-  v += nome + '... essa cancao nasceu pra voce\n';
-  v += 'Com todo amor, de ' + relacao;
-
-  return v;
+  try {
+    var resp = await axios.post('https://api.anthropic.com/v1/messages', {
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      messages: [{ role: 'user', content: prompt }]
+    }, {
+      headers: {
+        'x-api-key': ANTHROPIC_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json'
+      }
+    });
+    return resp.data.content[0].text;
+  } catch(e) {
+    console.error('Claude erro:', e.response && e.response.data || e.message);
+    // Fallback basico
+    return '[Verse 1]\n' + nome + ', ' + relacao + ' quer te dizer\nQue voce e ' + palavras.split(',')[0] + ' de um jeito sem igual\n' + (memoria ? memoria.substring(0,80) : 'Cada momento ao seu lado') + '\nFez meu coracao te amar de verdade\n\n[Chorus]\n' + nome + ', essa musica e so sua\nFeita com amor que ' + relacao + ' tem\nQue fique pra sempre na memoria\nVoce e a melhor parte da minha vida';
+  }
 }
 
 app.post('/api/generate', async (req, res) => {
@@ -130,7 +120,7 @@ app.post('/api/generate', async (req, res) => {
     const sessionId = uuidv4();
     sessions.set(sessionId, { formData, taskIds: [], songs: [], paid: false, chosenIndex: 0 });
 
-    const lyrics = buildLyrics(formData);
+    const lyrics = await buildLyrics(formData);
     const styleTags = getStyleTags(formData);
     const songTitle = 'Musica para ' + (formData.nome_p || 'voce');
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
