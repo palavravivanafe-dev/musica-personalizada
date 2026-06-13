@@ -18,28 +18,65 @@ const mpClient = new MercadoPagoConfig({ accessToken: MP_TOKEN });
 const sessions = new Map();
 
 function getStyleTags(d) {
-  var estiloMap = {
-    'Sertanejo': 'sertanejo universitario, violao, guitarra country, voz masculina brasileira, emocional',
-    'Pop': 'pop brasileiro moderno, piano, bateria, producao moderna, romantico',
-    'Gospel': 'gospel brasileiro, piano, coral evangelico, voz poderosa, espiritual',
-    'Pagode': 'pagode romantico, cavaquinho, pandeiro, tamborim, voz masculina',
-    'MPB': 'MPB brasileira, violao acustico, voz suave, letra poetica',
-    'Funk': 'funk melody brasileiro, batida eletronica, voz jovem',
-    'Rock': 'rock nacional brasileiro, guitarra eletrica, bateria pesada',
-    'Balada': 'balada romantica, piano, cordas, orquestra, cinematografico'
-  };
-  var climaMap = {
-    'Alegre': 'alegre, animado, celebracao, feliz',
-    'Emocionante': 'emocional, tocante, profundo, lagrimas de alegria',
-    'Romantico': 'romantico, apaixonado, amor verdadeiro, intimidade',
-    'Espiritual': 'espiritual, fe, gratidao, louvor'
-  };
   var estilo = (d.estilo || 'Pop').split(' ')[0];
   var clima = (d.clima || 'Romantico').split(' ')[0];
-  var tags = estiloMap[estilo] || (estilo.toLowerCase() + ', brasileiro');
-  tags += ', ' + (climaMap[clima] || clima.toLowerCase());
-  if (d.ref) tags += ', influencia de ' + d.ref;
-  return tags;
+  var ref = d.ref || '';
+
+  var prompts = {
+    'Sertanejo': {
+      'Alegre':      'Modern Brazilian sertanejo, acoustic guitar, steel guitar, upbeat rhythm, 78 BPM, joyful male vocal, romantic countryside atmosphere, catchy chorus, radio-quality production, Jorge & Mateus inspired energy',
+      'Emocionante': 'Brazilian sertanejo ballad, acoustic guitar, emotional steel guitar, piano accents, 72 BPM, raspy emotional male vocal, heartfelt performance, romantic and touching atmosphere, powerful chorus',
+      'Romantico':   'Romantic Brazilian sertanejo, warm acoustic guitar, soft piano, emotional vocal, 74 BPM, love song atmosphere, intimate storytelling, memorable chorus, wedding proposal feeling',
+      'Espiritual':  'Romantic Brazilian sertanejo, warm acoustic guitar, soft piano, emotional vocal, 74 BPM, love song atmosphere, intimate storytelling, memorable chorus, wedding proposal feeling'
+    },
+    'Pop': {
+      'Alegre':      'Modern Brazilian pop, bright piano, uplifting synths, commercial drums, catchy melody, joyful atmosphere, radio-ready production, contemporary hit song, energetic and positive',
+      'Emocionante': 'Emotional pop ballad, piano driven, atmospheric synths, cinematic build-up, heartfelt vocal, emotional chorus, modern production, touching and inspiring mood',
+      'Romantico':   'Romantic pop ballad, emotional piano, warm synth pads, intimate vocals, heartfelt lyrics, cinematic atmosphere, beautiful chorus, radio-quality production',
+      'Espiritual':  'Emotional pop ballad, piano driven, atmospheric synths, cinematic build-up, heartfelt vocal, emotional chorus, modern production, touching and inspiring mood'
+    },
+    'Gospel': {
+      'Espiritual':  'Brazilian gospel worship, emotional piano, choir harmonies, cinematic strings, powerful spiritual atmosphere, heartfelt male vocal, worship chorus, church worship style',
+      'Emocionante': 'Inspirational gospel ballad, piano and strings, emotional choir, powerful worship vocals, faith-filled atmosphere, touching lyrics, cinematic production',
+      'Alegre':      'Joyful gospel praise song, uplifting choir, piano, acoustic guitar, positive energy, celebration atmosphere, inspiring vocals, church praise style',
+      'Romantico':   'Inspirational gospel ballad, piano and strings, emotional choir, powerful worship vocals, faith-filled atmosphere, touching lyrics, cinematic production'
+    },
+    'Pagode': {
+      'Romantico':   'Romantic Brazilian pagode, cavaquinho, pandeiro, smooth percussion, warm vocals, joyful romantic atmosphere, catchy chorus, authentic samba pagode groove',
+      'Alegre':      'Brazilian pagode, cavaquinho, tamborim, pandeiro, festive atmosphere, happy vocals, dancing groove, authentic roda de samba feeling',
+      'Emocionante': 'Emotional pagode ballad, cavaquinho, soft percussion, heartfelt vocal performance, romantic atmosphere, touching chorus, authentic Brazilian pagode',
+      'Espiritual':  'Emotional pagode ballad, cavaquinho, soft percussion, heartfelt vocal performance, romantic atmosphere, touching chorus, authentic Brazilian pagode'
+    },
+    'MPB': {
+      'Romantico':   'Brazilian MPB, acoustic guitar, soft piano, poetic lyrics, intimate atmosphere, emotional vocal, sophisticated harmony, timeless Brazilian music style',
+      'Emocionante': 'Emotional MPB ballad, acoustic guitar, piano, cinematic strings, heartfelt storytelling, poetic atmosphere, deep emotional vocal performance',
+      'Alegre':      'Light Brazilian MPB, acoustic guitar, gentle percussion, sunny atmosphere, positive mood, warm vocals, sophisticated and elegant arrangement',
+      'Espiritual':  'Emotional MPB ballad, acoustic guitar, piano, cinematic strings, heartfelt storytelling, poetic atmosphere, deep emotional vocal performance'
+    },
+    'Funk': {
+      'Romantico':   'Brazilian melodic funk, emotional synths, modern electronic beat, romantic atmosphere, catchy vocal melody, commercial production, emotional chorus',
+      'Alegre':      'Brazilian funk melody, energetic beat, modern synths, danceable groove, positive atmosphere, catchy hooks, radio-ready production',
+      'Emocionante': 'Melodic emotional funk, atmospheric synths, deep bass, emotional vocal, touching lyrics, modern Brazilian production, heartfelt chorus',
+      'Espiritual':  'Melodic emotional funk, atmospheric synths, deep bass, emotional vocal, touching lyrics, modern Brazilian production, heartfelt chorus'
+    },
+    'Rock': {
+      'Emocionante': 'Emotional rock ballad, electric guitars, live drums, cinematic atmosphere, passionate male vocal, soaring chorus, powerful emotional performance',
+      'Romantico':   'Romantic rock ballad, clean electric guitar, piano, emotional vocals, powerful chorus, cinematic production, heartfelt love song',
+      'Alegre':      'Uplifting rock anthem, energetic guitars, live drums, positive atmosphere, powerful vocals, stadium-ready chorus, modern rock production',
+      'Espiritual':  'Emotional rock ballad, electric guitars, live drums, cinematic atmosphere, passionate male vocal, soaring chorus, powerful emotional performance'
+    },
+    'Balada': {
+      'Romantico':   'Cinematic romantic ballad, emotional piano, orchestral strings, heartfelt vocal, intimate atmosphere, wedding song feeling, powerful emotional chorus',
+      'Emocionante': 'Emotional cinematic ballad, piano, strings, touching vocal performance, deep emotional atmosphere, movie soundtrack quality, heartfelt lyrics',
+      'Espiritual':  'Inspirational piano ballad, cinematic strings, uplifting atmosphere, emotional vocal, spiritual feeling, powerful and moving arrangement',
+      'Alegre':      'Cinematic romantic ballad, emotional piano, orchestral strings, heartfelt vocal, intimate atmosphere, wedding song feeling, powerful emotional chorus'
+    }
+  };
+
+  var estiloPrompts = prompts[estilo] || prompts['Pop'];
+  var prompt = estiloPrompts[clima] || estiloPrompts['Romantico'] || Object.values(estiloPrompts)[0];
+  if (ref) prompt += ', inspired by ' + ref;
+  return prompt;
 }
 
 function buildLyrics(d) {
