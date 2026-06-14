@@ -626,45 +626,60 @@ async function buildLyrics(d) {
   var clima = (d.clima || 'Romantico').split(' ')[0];
   var sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
 
-  var detalhes = [memoria, frase, especial].filter(Boolean).join(' | ');
+  var prompt =
+    'Voce e o compositor numero 1 do Brasil em musicas personalizadas. Sua especialidade e pegar a historia REAL de duas pessoas e transformar em letra de ' + estilo + ' que emociona na primeira escuta.\n\n' +
 
-  var prompt = 'Voce e o melhor compositor de ' + estilo + ' do Brasil. Voce ja escreveu hits para Marilia Mendonca, Henrique & Juliano e Legiao Urbana. Agora vai criar a letra MAIS PERSONALIZADA e EMOCIONANTE que essa pessoa ja ouviu na vida.\n\n' +
-    '== DADOS REAIS DA HISTORIA ==\n' +
-    'Nome: ' + nome + '\n' +
-    'Relacao: ' + relacao + '\n' +
-    'Como ela e: ' + palavras + '\n' +
-    'Historia/memoria: ' + memoria + '\n' +
-    (frase ? 'Frase ou apelido especial: ' + frase + '\n' : '') +
-    (especial ? 'Algo especial para eles: ' + especial + '\n' : '') +
-    (ocasiao ? 'Ocasiao: ' + ocasiao + '\n' : '') +
-    (sentir ? 'Quero que ela sinta: ' + sentir + '\n' : '') +
-    '\n== REGRAS ABSOLUTAS ==\n' +
-    '1. USE os detalhes reais como ESPINHA DORSAL da letra — eles sao o que torna essa musica unica\n' +
-    '2. PROIBIDO metaforas genericas como: "vulcao", "tempestade", "mar de estrelas", "asas", "luz no fim do tunel"\n' +
-    '3. OBRIGATORIO transformar cada detalhe em imagem poetica ESPECIFICA. Exemplos:\n' +
-    '   - "nos conhecemos num app" → use a ideia de uma tela, uma notificacao, um match que virou destino\n' +
-    '   - "ela e teimosa" → mostre a teimosia de forma concreta e carinhosa\n' +
-    '   - "ela e alegre" → descreva como essa alegria APARECE no dia a dia deles\n' +
-    '4. O REFRÃO deve mencionar "' + nome + '" e ser tao grudento que nao sai da cabeca\n' +
-    '5. Cada verso deve ser diferente — NUNCA repita a mesma ideia com palavras diferentes\n' +
-    '6. A letra deve ser tao especifica que so poderia ser sobre ' + nome + ' — nao sobre qualquer pessoa\n' +
-    '7. Use linguagem do estilo ' + estilo + ': ' +
-      (estilo === 'Sertanejo' ? 'rimas AABB, palavras simples, referencias ao cotidiano, refrão que o povo canta junto' :
-       estilo === 'Gospel' ? 'fe, bencao divina, gratidao a Deus, linguagem de adoracao' :
-       estilo === 'Pagode' ? 'gingado, malicia romantica, saudade, palavras do povo' :
-       estilo === 'MPB' ? 'poetico, sofisticado, metaforas literarias, verso livre' :
-       estilo === 'Rock' ? 'energia, intensidade, refrão poderoso, emocao crua' :
-       'moderno, fluido, emocional, refrão comercial que gruda') + '\n' +
-    '8. Clima desejado: ' + clima + '\n\n' +
-    '== FORMATO OBRIGATORIO ==\n' +
-    '[Verse 1]\n(4 linhas — apresenta a historia ESPECIFICA deles de forma poetica)\n\n' +
-    '[Pre-Chorus]\n(2 linhas — transicao emocional, aumenta a tensao)\n\n' +
-    '[Chorus]\n(4 linhas — REFRÃO que gruda, menciona ' + nome + ', emocao maxima, especifico)\n\n' +
-    '[Verse 2]\n(4 linhas — aprofunda a historia, novos detalhes especificos, NUNCA repete o verso 1)\n\n' +
+    '=== HISTORIA REAL QUE VOCE VAI USAR ===\n' +
+    'Destinatario: ' + nome + '\n' +
+    'Quem manda: ' + relacao + '\n' +
+    'Como ' + nome + ' e: ' + palavras + '\n' +
+    'O que aconteceu / historia deles: ' + memoria + '\n' +
+    (frase ? 'Apelido ou frase especial que eles usam: ' + frase + '\n' : '') +
+    (especial ? 'Detalhe especial da historia: ' + especial + '\n' : '') +
+    (ocasiao ? 'Motivo da musica: ' + ocasiao + '\n' : '') +
+    (sentir ? 'O que ' + nome + ' deve sentir ao ouvir: ' + sentir + '\n' : '') +
+
+    '\n=== COMO ESCREVER A LETRA ===\n' +
+    'PASSO 1 — Antes de escrever, identifique os elementos concretos da historia:\n' +
+    '  • O QUE aconteceu: extraia os fatos reais de "' + memoria + '"\n' +
+    '  • QUEM e ' + nome + ': use as palavras "' + palavras + '" de forma que ela se reconheca\n' +
+    (frase ? '  • O APELIDO "' + frase + '" deve aparecer na letra de forma natural e carinhosa\n' : '') +
+    '\nPASSO 2 — Regras de escrita:\n' +
+    '  ✅ Use detalhes tao especificos que ' + nome + ' vai pensar "isso so pode ser sobre mim"\n' +
+    '  ✅ Cada caracteristica de ' + palavras + ' deve aparecer de forma concreta na letra\n' +
+    '  ✅ A historia de "' + memoria + '" deve ser o fio condutor dos versos\n' +
+    '  ✅ Use o nome "' + nome + '" pelo menos 3 vezes na letra\n' +
+    (frase ? '  ✅ Use o apelido/frase "' + frase + '" pelo menos 2 vezes\n' : '') +
+    '  ❌ PROIBIDO versos genericos que servem para qualquer pessoa\n' +
+    '  ❌ PROIBIDO metaforas vazias: "vulcao", "tempestade", "asas", "luz no fim do tunel"\n' +
+    '  ❌ PROIBIDO repetir a mesma ideia com palavras diferentes entre verso 1 e verso 2\n' +
+
+    '\nESTILO: ' + estilo + ' — ' +
+    (estilo === 'Sertanejo' ? 'rimas simples AABB, linguagem direta do povo, refrão que todo mundo canta, palavras do cotidiano' :
+     estilo === 'Gospel' ? 'fe em Deus como protagonista, bencao, proposito divino, linguagem de adoracao sincera' :
+     estilo === 'Pagode' ? 'gingado, malicia romantica, saudade gostosa, palavras simples e carinhosas do povo' :
+     estilo === 'MPB' ? 'verso poetico e sofisticado, imagens literarias ricas, emocao contida que explode no refrão' :
+     estilo === 'Rock' ? 'energia e intensidade, verso direto e impactante, refrão poderoso e gritavel' :
+     estilo === 'Reggae' ? 'leveza e positividade, ritmo nas palavras, amor sem pressa, celebracao da vida' :
+     estilo === 'Balada' ? 'emocao intensa, palavras que tocam fundo, melodia que fica na memoria, romantico e profundo' :
+     'moderno e fluido, refrão comercial que gruda, emocao acessivel, direto ao coracao') +
+    '\nCLIMA: ' + clima +
+
+    '\n\n=== FORMATO DA LETRA ===\n' +
+    '[Verse 1]\n' +
+    '(4 linhas — conte o INICIO da historia deles, usando os fatos reais de forma poetica)\n\n' +
+    '[Pre-Chorus]\n' +
+    '(2 linhas — transicao emocional, o momento que o sentimento cresce)\n\n' +
+    '[Chorus]\n' +
+    '(4 linhas — refrão que gruda, usa o nome ' + nome + ', resume o amor deles em palavras que ficam na memoria)\n\n' +
+    '[Verse 2]\n' +
+    '(4 linhas — aprofunde a historia, mostre as caracteristicas de ' + nome + ' de forma especifica, TOTALMENTE diferente do verso 1)\n\n' +
     '[Chorus]\n\n' +
-    '[Bridge]\n(4 linhas — o momento mais intenso e intimo da musica, climax emocional)\n\n' +
-    '[Outro]\n(2 linhas — fechamento memoravel, deixa a pessoa com vontade de ouvir de novo)\n\n' +
-    'RESULTADO: Uma letra que quando ' + nome + ' ouvir, vai chorar e dizer "como ele sabia EXATAMENTE a nossa historia". APENAS a letra, zero explicacoes, zero comentarios.';
+    '[Bridge]\n' +
+    '(4 linhas — o momento mais intimo e verdadeiro, como se fosse um sussurro direto para ' + nome + ')\n\n' +
+    '[Outro]\n' +
+    '(2 linhas — fechamento que deixa ' + nome + ' com o coracao cheio)\n\n' +
+    'ENTREGUE apenas a letra. Nenhum comentario, nenhuma explicacao, nenhum titulo.';
 
   try {
     var resp = await axios.post('https://api.anthropic.com/v1/messages', {
