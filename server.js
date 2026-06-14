@@ -626,7 +626,45 @@ async function buildLyrics(d) {
   var clima = (d.clima || 'Romantico').split(' ')[0];
   var sentir = Array.isArray(d.sentir) ? d.sentir.join(', ') : (d.sentir || '');
 
-  var prompt = 'Voce e um compositor GENIO de ' + estilo + ' brasileiro, nivel Marilia Mendonca, Henrique & Juliano, Legiao Urbana. Sua tarefa e criar uma letra POETICA, PROFISSIONAL e EMOCIONANTE.\n\nINFORMACOES DO CLIENTE (use como INSPIRACAO, NUNCA copie literalmente):\n- Destinatario: ' + nome + '\n- Quem envia: ' + relacao + '\n- Como ela e: ' + palavras + '\n- Como se conheceram / historia: ' + memoria + '\n- Algo especial: ' + (frase || especial || '') + '\n- Ocasiao: ' + (ocasiao || '') + '\n- Sentimento desejado: ' + (sentir || '') + '\n\nREGRA DE OURO - TRANSFORMACAO POETICA:\nCada dado DEVE ser transformado em metafora ou imagem poetica.\n\nESTILO: ' + estilo + ' | CLIMA: ' + clima + '\n\nFORMATO OBRIGATORIO:\n[Verse 1]\n(4 linhas)\n\n[Pre-Chorus]\n(2 linhas)\n\n[Chorus]\n(4 linhas - menciona ' + nome + ')\n\n[Verse 2]\n(4 linhas)\n\n[Chorus]\n(repete)\n\n[Bridge]\n(4 linhas)\n\n[Outro]\n(2 linhas)\n\nAPENAS a letra, zero explicacoes.';
+  var detalhes = [memoria, frase, especial].filter(Boolean).join(' | ');
+
+  var prompt = 'Voce e o melhor compositor de ' + estilo + ' do Brasil. Voce ja escreveu hits para Marilia Mendonca, Henrique & Juliano e Legiao Urbana. Agora vai criar a letra MAIS PERSONALIZADA e EMOCIONANTE que essa pessoa ja ouviu na vida.\n\n' +
+    '== DADOS REAIS DA HISTORIA ==\n' +
+    'Nome: ' + nome + '\n' +
+    'Relacao: ' + relacao + '\n' +
+    'Como ela e: ' + palavras + '\n' +
+    'Historia/memoria: ' + memoria + '\n' +
+    (frase ? 'Frase ou apelido especial: ' + frase + '\n' : '') +
+    (especial ? 'Algo especial para eles: ' + especial + '\n' : '') +
+    (ocasiao ? 'Ocasiao: ' + ocasiao + '\n' : '') +
+    (sentir ? 'Quero que ela sinta: ' + sentir + '\n' : '') +
+    '\n== REGRAS ABSOLUTAS ==\n' +
+    '1. USE os detalhes reais como ESPINHA DORSAL da letra — eles sao o que torna essa musica unica\n' +
+    '2. PROIBIDO metaforas genericas como: "vulcao", "tempestade", "mar de estrelas", "asas", "luz no fim do tunel"\n' +
+    '3. OBRIGATORIO transformar cada detalhe em imagem poetica ESPECIFICA. Exemplos:\n' +
+    '   - "nos conhecemos num app" → use a ideia de uma tela, uma notificacao, um match que virou destino\n' +
+    '   - "ela e teimosa" → mostre a teimosia de forma concreta e carinhosa\n' +
+    '   - "ela e alegre" → descreva como essa alegria APARECE no dia a dia deles\n' +
+    '4. O REFRÃO deve mencionar "' + nome + '" e ser tao grudento que nao sai da cabeca\n' +
+    '5. Cada verso deve ser diferente — NUNCA repita a mesma ideia com palavras diferentes\n' +
+    '6. A letra deve ser tao especifica que so poderia ser sobre ' + nome + ' — nao sobre qualquer pessoa\n' +
+    '7. Use linguagem do estilo ' + estilo + ': ' +
+      (estilo === 'Sertanejo' ? 'rimas AABB, palavras simples, referencias ao cotidiano, refrão que o povo canta junto' :
+       estilo === 'Gospel' ? 'fe, bencao divina, gratidao a Deus, linguagem de adoracao' :
+       estilo === 'Pagode' ? 'gingado, malicia romantica, saudade, palavras do povo' :
+       estilo === 'MPB' ? 'poetico, sofisticado, metaforas literarias, verso livre' :
+       estilo === 'Rock' ? 'energia, intensidade, refrão poderoso, emocao crua' :
+       'moderno, fluido, emocional, refrão comercial que gruda') + '\n' +
+    '8. Clima desejado: ' + clima + '\n\n' +
+    '== FORMATO OBRIGATORIO ==\n' +
+    '[Verse 1]\n(4 linhas — apresenta a historia ESPECIFICA deles de forma poetica)\n\n' +
+    '[Pre-Chorus]\n(2 linhas — transicao emocional, aumenta a tensao)\n\n' +
+    '[Chorus]\n(4 linhas — REFRÃO que gruda, menciona ' + nome + ', emocao maxima, especifico)\n\n' +
+    '[Verse 2]\n(4 linhas — aprofunda a historia, novos detalhes especificos, NUNCA repete o verso 1)\n\n' +
+    '[Chorus]\n\n' +
+    '[Bridge]\n(4 linhas — o momento mais intenso e intimo da musica, climax emocional)\n\n' +
+    '[Outro]\n(2 linhas — fechamento memoravel, deixa a pessoa com vontade de ouvir de novo)\n\n' +
+    'RESULTADO: Uma letra que quando ' + nome + ' ouvir, vai chorar e dizer "como ele sabia EXATAMENTE a nossa historia". APENAS a letra, zero explicacoes, zero comentarios.';
 
   try {
     var resp = await axios.post('https://api.anthropic.com/v1/messages', {
