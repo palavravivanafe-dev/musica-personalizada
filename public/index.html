@@ -320,9 +320,11 @@
     });
     const el = document.getElementById('step'+passo);
     if (el) el.classList.add('active');
-    // Esconde depoimentos a partir do passo 2
-    const dep = document.querySelector('.depoimentos');
-    if (dep) dep.style.display = passo === 1 ? 'block' : 'none';
+    // Esconde depoimentos e hero a partir do passo 2
+    ['depoimentos','hero'].forEach(cls => {
+      const el2 = document.querySelector('.'+cls);
+      if (el2) el2.style.display = passo === 1 ? '' : 'none';
+    });
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
