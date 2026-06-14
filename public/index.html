@@ -1,458 +1,962 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Criar Minha Música Personalizada</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Criar Minha Música Personalizada</title>
+  <meta name="description" content="Transforme sua história em uma música inesquecível. 100% original, ouça antes de pagar." />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<!-- Meta Pixel -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2100902017041343');fbq('track','PageView');
-</script>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0a0a0f;
+      color: #f0f0f0;
+      min-height: 100vh;
+    }
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--roxo:#2D1B69;--roxo2:#4A2C8F;--roxo-l:#EDE9FF;--rosa:#C4386B;--cinza:#3D3D3D;--cinza-l:#F8F7FF;--branco:#fff}
-body{font-family:'DM Sans',sans-serif;color:var(--cinza);background:var(--cinza-l);min-height:100vh;padding:20px}
-.container{max-width:520px;margin:0 auto}
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d0d1a 100%);
+      border-bottom: 1px solid #2a1a4a;
+      padding: 14px 20px;
+      text-align: center;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(139,92,246,0.15);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #c4b5fd;
+    }
 
-.header{background:var(--roxo);border-radius:16px 16px 0 0;padding:28px 24px 24px;text-align:center}
-.header .badge{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:12px}
-.header h1{font-family:'Cormorant Garamond',serif;font-size:26px;color:#fff;font-weight:600;line-height:1.3;margin-bottom:6px}
-.header p{font-size:13px;color:rgba(255,255,255,.6);font-weight:300}
-.badges{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px}
-.badges span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:11px;padding:4px 10px;border-radius:99px}
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a0a2e 0%, #0d1a2e 50%, #0a0a0f 100%);
+      padding: 50px 20px 40px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 30%, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 16px;
+      color: #a0a0c0;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .hero-badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #d0d0e8;
+    }
 
-.progress-bar{height:4px;background:rgba(255,255,255,.15)}
-.progress-fill{height:4px;background:var(--rosa);transition:width .4s}
+    /* ── DEPOIMENTOS ── */
+    .depoimentos {
+      background: #0f0f1a;
+      padding: 40px 20px;
+    }
+    .depoimentos h2 {
+      text-align: center;
+      font-size: 22px;
+      color: #c4b5fd;
+      margin-bottom: 24px;
+    }
+    .depoimentos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .depoimento-card {
+      background: rgba(139,92,246,0.08);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .depoimento-stars { color: #f59e0b; font-size: 15px; margin-bottom: 10px; }
+    .depoimento-texto { font-size: 14px; color: #c0c0d8; line-height: 1.6; margin-bottom: 12px; }
+    .depoimento-autor { font-size: 13px; color: #8b5cf6; font-weight: 600; }
 
-.card{background:var(--branco);border-radius:0 0 16px 16px;border:1px solid #E8E4FF;border-top:none;overflow:hidden}
-.card-inner{padding:24px}
+    /* ── FORMULÁRIO CONTAINER ── */
+    .form-section {
+      padding: 40px 20px 60px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .form-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #e0e0ff;
+    }
 
-.steps-nav{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:24px}
-.dot{width:26px;height:26px;border-radius:50%;border:2px solid #E0DAFA;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#bbb;transition:all .2s;flex-shrink:0}
-.dot.active{border-color:var(--roxo);background:var(--roxo);color:#fff}
-.dot.done{border-color:var(--rosa);background:var(--rosa);color:#fff}
-.line{height:2px;width:18px;background:#E0DAFA;transition:background .3s}
-.line.done{background:var(--rosa)}
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .progress-step {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #2a1a4a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #555;
+      transition: all 0.3s;
+    }
+    .progress-step.active {
+      border-color: #8b5cf6;
+      background: #8b5cf6;
+      color: #fff;
+    }
+    .progress-step.done {
+      border-color: #6d28d9;
+      background: #6d28d9;
+      color: #fff;
+    }
 
-.step{display:none}.step.active{display:block}
-.step-label{font-size:11px;color:#bbb;margin-bottom:4px}
-.step-title{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--roxo);font-weight:600;margin-bottom:4px}
-.step-desc{font-size:13px;color:#888;margin-bottom:20px;line-height:1.5}
+    /* ── PASSO ── */
+    .step { display: none; }
+    .step.active { display: block; }
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8b5cf6;
+      margin-bottom: 6px;
+    }
+    .step h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #f0f0ff;
+    }
 
-.field{margin-bottom:16px}
-.field label{display:block;font-size:13px;font-weight:500;color:var(--cinza);margin-bottom:5px}
-.field label .req{color:var(--rosa);margin-left:2px}
-.field input,.field textarea,.field select{width:100%;padding:11px 14px;border:1.5px solid #E0DAFA;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--cinza);background:var(--cinza-l);outline:none;transition:border .15s;-webkit-appearance:none}
-.field input:focus,.field textarea:focus{border-color:var(--roxo2);background:#fff}
-.field textarea{resize:vertical;min-height:80px;line-height:1.6}
-.field .hint{font-size:11px;color:#bbb;margin-top:4px;line-height:1.4}
+    /* ── CAMPOS ── */
+    label { display: block; font-size: 14px; color: #b0b0c8; margin-bottom: 6px; font-weight: 500; }
+    label span.req { color: #f87171; }
+    .field { margin-bottom: 20px; }
 
-.radio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
-.radio-opt{position:relative}
-.radio-opt input{position:absolute;opacity:0;width:0;height:0}
-.radio-opt label{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #E0DAFA;border-radius:10px;cursor:pointer;font-size:13px;color:var(--cinza);background:var(--cinza-l);transition:all .15s;line-height:1.3}
-.radio-opt input:checked+label{border-color:var(--roxo);background:var(--roxo-l);color:var(--roxo);font-weight:500}
-.em{font-size:15px}
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      color: #f0f0f0;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus { border-color: #8b5cf6; }
+    textarea { resize: vertical; min-height: 90px; }
+    select option { background: #1a1a2e; }
 
-.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:4px}
-.check-opt{position:relative}
-.check-opt input{position:absolute;opacity:0;width:0;height:0}
-.check-opt label{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid #E0DAFA;border-radius:10px;cursor:pointer;font-size:13px;color:var(--cinza);background:var(--cinza-l);transition:all .15s}
-.check-opt input:checked+label{border-color:var(--rosa);background:#FFE8F0;color:var(--rosa);font-weight:500}
+    /* ── OPÇÕES CLICÁVEIS ── */
+    .opcoes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .opcao {
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 14px;
+      color: #c0c0d8;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .opcao:hover { border-color: #8b5cf6; color: #e0e0ff; }
+    .opcao.selected {
+      border-color: #8b5cf6;
+      background: rgba(139,92,246,0.15);
+      color: #fff;
+    }
+    .opcao .emoji { display: block; font-size: 22px; margin-bottom: 4px; }
 
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;gap:10px}
-.btn-back{background:transparent;border:1.5px solid #E0DAFA;border-radius:99px;padding:11px 22px;font-size:14px;color:#999;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
-.btn-back:hover{border-color:var(--roxo);color:var(--roxo)}
-.btn-next{background:var(--roxo);color:#fff;border:none;border-radius:99px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s}
-.btn-next:hover{opacity:.88}
-.btn-next:disabled{opacity:.5;cursor:not-allowed}
+    /* Opções menores (sentimentos) */
+    .opcoes-sentimento {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .opcao-sentimento {
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: #c0c0d8;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .opcao-sentimento:hover { border-color: #8b5cf6; }
+    .opcao-sentimento.selected {
+      border-color: #8b5cf6;
+      background: rgba(139,92,246,0.15);
+      color: #fff;
+    }
 
-/* LOADING */
-.loading-box{text-align:center;padding:32px 16px}
-.spinner{width:52px;height:52px;border:4px solid #E0DAFA;border-top-color:var(--roxo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-box h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--roxo);margin-bottom:8px}
-.loading-box p{font-size:13px;color:#888;line-height:1.6}
-.loading-dots{display:inline-block}
-.loading-dots::after{content:'...';animation:dots 1.5s steps(4,end) infinite}
-@keyframes dots{0%,100%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+    /* ── BOTÕES ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .btn-back {
+      flex: 0 0 auto;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 14px 20px;
+      font-size: 15px;
+      color: #a0a0c0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { border-color: rgba(255,255,255,0.3); color: #e0e0ff; }
+    .btn-next {
+      flex: 1;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border: none;
+      border-radius: 10px;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(109,40,217,0.4);
+    }
+    .btn-next:hover { background: linear-gradient(135deg, #8b5cf6, #7c3aed); transform: translateY(-1px); }
+    .btn-next:active { transform: translateY(0); }
 
-/* PLAYER */
-.songs-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
-.song-card{border:2px solid #E0DAFA;border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;background:var(--cinza-l)}
-.song-card:hover{border-color:var(--roxo2)}
-.song-card.selected{border-color:var(--roxo);background:var(--roxo-l)}
-.song-card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.song-num{width:28px;height:28px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
-.song-card.selected .song-num{background:var(--rosa)}
-.song-title{font-size:14px;font-weight:500;color:var(--cinza);flex:1}
-.song-select-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;border:2px solid #E0DAFA;background:#fff;font-size:12px;font-weight:600;color:#aaa;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;font-family:"DM Sans",sans-serif}
-.song-select-btn:hover{border-color:var(--rosa);color:var(--rosa)}
-.song-card.selected .song-select-btn{border-color:var(--rosa);background:var(--rosa);color:#fff}
-.song-card.selected{border-color:var(--rosa);background:#FFF0F5}
-.song-card audio{width:100%;height:36px;border-radius:8px;outline:none;display:block}
-.song-card audio::-webkit-media-controls-panel{background:var(--roxo-l)}
+    /* ── PREÇO ── */
+    .preco-box {
+      background: rgba(139,92,246,0.08);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .preco-de { font-size: 14px; color: #888; text-decoration: line-through; }
+    .preco-por { font-size: 36px; font-weight: 800; color: #c4b5fd; }
+    .preco-desc { font-size: 13px; color: #888; }
+    .preco-features { margin-top: 14px; text-align: left; }
+    .preco-features li {
+      font-size: 14px;
+      color: #c0c0d8;
+      padding: 4px 0;
+      list-style: none;
+    }
+    .preco-features li::before { content: '✅ '; }
 
-.btn-pay{display:block;width:100%;background:var(--rosa);color:#fff;border:none;border-radius:99px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;margin-top:4px;text-align:center}
-.btn-pay:hover{opacity:.88}
-.btn-pay:disabled{opacity:.5;cursor:not-allowed}
-.secure-badge{display:flex;align-items:center;justify-content:center;gap:6px;font-size:11px;color:#aaa;margin-top:8px}
+    /* ── LOADING ── */
+    #loading-section { display: none; text-align: center; padding: 60px 20px; }
+    .spinner {
+      width: 56px; height: 56px;
+      border: 4px solid rgba(139,92,246,0.2);
+      border-top-color: #8b5cf6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-section h2 { font-size: 22px; color: #c4b5fd; margin-bottom: 10px; }
+    #loading-section p { color: #888; font-size: 15px; }
+    .loading-dots span {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #8b5cf6;
+      border-radius: 50%;
+      margin: 0 3px;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
 
-/* GERAR */
-.btn-gerar{display:block;width:100%;background:var(--roxo);color:#fff;border:none;border-radius:99px;padding:15px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;text-align:center}
-.btn-gerar:hover{opacity:.88}
-.preco-box{background:var(--cinza-l);border:1.5px solid #E0DAFA;border-radius:12px;padding:16px;text-align:center;margin-bottom:16px}
-.preco-riscado{font-size:13px;color:#aaa;text-decoration:line-through}
-.preco-valor{font-family:'Cormorant Garamond',serif;font-size:46px;color:var(--roxo);font-weight:600;line-height:1;margin:4px 0}
-.preco-valor sup{font-size:18px;vertical-align:super;font-family:'DM Sans',sans-serif;font-weight:400}
-.preco-tag{font-size:12px;color:#888;margin-bottom:12px}
-.beneficios{display:flex;flex-direction:column;gap:6px;text-align:left}
-.beneficio{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cinza)}
+    /* ── PLAYER ── */
+    #musicas-section { display: none; padding: 20px; max-width: 620px; margin: 0 auto 60px; }
+    #musicas-section h2 { font-size: 22px; color: #c4b5fd; text-align: center; margin-bottom: 20px; }
 
-  .depoimentos{padding:32px 20px;background:#F8F7FF;border-radius:16px;margin:24px 0}
-  .dep-title{font-size:20px;font-weight:700;color:var(--roxo);text-align:center;margin-bottom:20px}
-  .dep-grid{display:grid;gap:16px}
-  .dep-card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06)}
-  .dep-stars{color:#F59E0B;font-size:18px;margin-bottom:8px}
-  .dep-texto{font-size:14px;color:#555;line-height:1.6;margin-bottom:16px;font-style:italic}
-  .dep-autor{display:flex;align-items:center;gap:10px}
-  .dep-avatar{width:36px;height:36px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
-  .dep-autor strong{display:block;font-size:13px;color:var(--cinza)}
-  .dep-autor span{font-size:11px;color:#999}
+    .musica-card {
+      background: rgba(139,92,246,0.08);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .musica-card.selecionada { border-color: #8b5cf6; background: rgba(139,92,246,0.15); }
+    .musica-card h3 { font-size: 16px; color: #e0e0ff; margin-bottom: 12px; }
 
-</style>
+    .player-protegido {
+      position: relative;
+      width: 100%;
+    }
+    .player-protegido audio {
+      width: 100%;
+      filter: blur(0);
+    }
+    .player-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .btn-escolher {
+      width: 100%;
+      margin-top: 14px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-escolher:hover { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+    .btn-escolher.chosen {
+      background: linear-gradient(135deg, #059669, #047857);
+    }
+
+    /* ── PAGAMENTO ── */
+    #pagamento-section {
+      display: none;
+      padding: 20px;
+      max-width: 620px;
+      margin: 0 auto 60px;
+      text-align: center;
+    }
+    #pagamento-section h2 { font-size: 22px; color: #c4b5fd; margin-bottom: 8px; }
+    #pagamento-section p { color: #888; margin-bottom: 24px; }
+    .btn-pagar {
+      display: inline-block;
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(5,150,105,0.4);
+      transition: all 0.2s;
+    }
+    .btn-pagar:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(5,150,105,0.5); }
+    .pagamento-info { margin-top: 14px; font-size: 13px; color: #666; }
+
+    /* ── ERRO ── */
+    .erro-box {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: 10px;
+      padding: 16px;
+      color: #fca5a5;
+      font-size: 14px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: #444;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .opcoes { grid-template-columns: repeat(2, 1fr); }
+      .btn-row { flex-direction: column-reverse; }
+      .btn-back { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="badge">♪ +500 músicas entregues · 4.9★</div>
-    <h1>Transforme sua história em uma música inesquecível</h1>
-    <p>Criamos uma música personalizada com nomes, memórias e sentimentos reais — perfeita para emocionar quem você ama.</p>
-    <div class="badges">
-      <span>🎵 100% original</span>
-      <span>🎧 Ouça antes de pagar</span>
-      <span>🔒 Mercado Pago seguro</span>
-    </div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">♪ +500 músicas entregues · 4.9★</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Transforme sua história em uma música inesquecível</h1>
+  <p>Criamos uma música personalizada com nomes, memórias e sentimentos reais — perfeita para emocionar quem você ama.</p>
+  <div class="hero-badges">
+    <span class="hero-badge">🎵 100% original</span>
+    <span class="hero-badge">🎧 Ouça antes de pagar</span>
+    <span class="hero-badge">🔒 Mercado Pago seguro</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:20%"></div></div>
+</div>
 
-  <div class="card">
-    <div class="card-inner">
-
-      <div class="steps-nav">
-        <div class="dot active" id="d1">1</div><div class="line" id="l1"></div>
-        <div class="dot" id="d2">2</div><div class="line" id="l2"></div>
-        <div class="dot" id="d3">3</div><div class="line" id="l3"></div>
-        <div class="dot" id="d4">4</div><div class="line" id="l4"></div>
-        <div class="dot" id="d5">5</div>
-      </div>
-
-      <!-- STEP 1 -->
-      <div class="step active" id="s1">
-        <p class="step-label">Passo 1 de 5</p>
-        <h2 class="step-title">A Ocasião</h2>
-        <p class="step-desc">Para qual momento especial é essa música?</p>
-        <div class="field">
-          <label>Ocasião <span class="req">*</span></label>
-          <div class="radio-grid">
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc1" value="Casamento 💍"><label for="oc1"><span class="em">💍</span>Casamento</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc2" value="Aniversário 🎂"><label for="oc2"><span class="em">🎂</span>Aniversário</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc3" value="Namoro 💑"><label for="oc3"><span class="em">💑</span>Namoro</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc4" value="Dia das Mães 👩"><label for="oc4"><span class="em">👩</span>Dia das Mães</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc5" value="Dia dos Pais 👨"><label for="oc5"><span class="em">👨</span>Dia dos Pais</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc6" value="Formatura 🎓"><label for="oc6"><span class="em">🎓</span>Formatura</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc7" value="Homenagem 🙏"><label for="oc7"><span class="em">🙏</span>Homenagem</label></div>
-            <div class="radio-opt"><input type="radio" name="ocasiao" id="oc8" value="Outro 🎵"><label for="oc8"><span class="em">🎵</span>Outro</label></div>
-          </div>
-        </div>
-        <div class="nav"><span></span><button class="btn-next" onclick="ir(2)">Próximo →</button></div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="step" id="s2">
-        <p class="step-label">Passo 2 de 5</p>
-        <h2 class="step-title">Para quem é?</h2>
-        <p class="step-desc">Conte sobre a pessoa que vai receber a música.</p>
-        <div class="field"><label>Nome da pessoa <span class="req">*</span></label><input type="text" id="nome_p" placeholder="Ex: Ana, Carlos..."></div>
-        <div class="field"><label>Qual sua relação com ela? <span class="req">*</span></label><input type="text" id="relacao" placeholder="Ex: minha namorada, minha mãe..."></div>
-        <div class="field"><label>Como descreveria essa pessoa em 3 palavras? <span class="req">*</span></label><input type="text" id="palavras" placeholder="Ex: carinhosa, forte, alegre..."></div>
-        <div class="field"><label>Qual a memória mais especial que têm juntos? <span class="req">*</span></label><textarea id="memoria" placeholder="Quanto mais detalhes, mais personalizada ficará a música..."></textarea></div>
-        <div class="nav"><button class="btn-back" onclick="ir(1)">← Voltar</button><button class="btn-next" onclick="ir(3)">Próximo →</button></div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="step" id="s3">
-        <p class="step-label">Passo 3 de 5</p>
-        <h2 class="step-title">Estilo da Música</h2>
-        <p class="step-desc">Como você quer que soe?</p>
-        <div class="field">
-          <label>Gênero musical <span class="req">*</span></label>
-          <div class="radio-grid">
-            <div class="radio-opt"><input type="radio" name="estilo" id="es1" value="Pop 🎵"><label for="es1"><span class="em">🎵</span>Pop</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es2" value="Sertanejo 🤠"><label for="es2"><span class="em">🤠</span>Sertanejo</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es3" value="Gospel ✝️"><label for="es3"><span class="em">✝️</span>Gospel</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es4" value="Pagode 🥁"><label for="es4"><span class="em">🥁</span>Pagode</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es5" value="MPB 🎸"><label for="es5"><span class="em">🎸</span>MPB</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es6" value="Reggae 🌿"><label for="es6"><span class="em">🌿</span>Reggae</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es7" value="Rock 🎸"><label for="es7"><span class="em">🎸</span>Rock</label></div>
-            <div class="radio-opt"><input type="radio" name="estilo" id="es8" value="Balada 🎹"><label for="es8"><span class="em">🎹</span>Balada</label></div>
-          </div>
-        </div>
-        <div class="field">
-          <label>Clima da música <span class="req">*</span></label>
-          <div class="radio-grid">
-            <div class="radio-opt"><input type="radio" name="clima" id="cl1" value="Alegre 😄"><label for="cl1"><span class="em">😄</span>Alegre</label></div>
-            <div class="radio-opt"><input type="radio" name="clima" id="cl2" value="Emocionante 😢"><label for="cl2"><span class="em">😢</span>Emocionante</label></div>
-            <div class="radio-opt"><input type="radio" name="clima" id="cl3" value="Romântico 🥰"><label for="cl3"><span class="em">🥰</span>Romântico</label></div>
-            <div class="radio-opt"><input type="radio" name="clima" id="cl4" value="Espiritual 🙏"><label for="cl4"><span class="em">🙏</span>Espiritual</label></div>
-          </div>
-        </div>
-        <div class="field"><label>Algum cantor ou música de referência?</label><input type="text" id="ref" placeholder="Ex: no estilo do Jorge e Mateus, parecida com..."><p class="hint">Opcional — ajuda a acertar o tom.</p></div>
-        <div class="nav"><button class="btn-back" onclick="ir(2)">Próximo →</button><button class="btn-next" onclick="ir(4)">Próximo →</button></div>
-      </div>
-
-      <!-- STEP 4 -->
-      <div class="step" id="s4">
-        <p class="step-label">Passo 4 de 5</p>
-        <h2 class="step-title">Detalhes Especiais</h2>
-        <p class="step-desc">Esses detalhes fazem a música ser única.</p>
-        <div class="field"><label>Frase, apelido ou expressão especial de vocês?</label><input type="text" id="frase" placeholder="Ex: 'meu bem', 'te amo até Plutão', apelido..."></div>
-        <div class="field"><label>Algum lugar, música ou coisa especial para vocês?</label><input type="text" id="especial" placeholder="Ex: a praia onde se conheceram..."></div>
-        <div class="field">
-          <label>O que você quer que ela sinta ao ouvir?</label>
-          <div class="check-grid">
-            <div class="check-opt"><input type="checkbox" id="s_1" value="Chorar de emoção"><label for="s_1">Chorar de emoção</label></div>
-            <div class="check-opt"><input type="checkbox" id="s_2" value="Sentir-se amada"><label for="s_2">Sentir-se amada</label></div>
-            <div class="check-opt"><input type="checkbox" id="s_3" value="Sorrir e lembrar"><label for="s_3">Sorrir e lembrar</label></div>
-            <div class="check-opt"><input type="checkbox" id="s_4" value="Sentir Deus perto"><label for="s_4">Sentir Deus perto</label></div>
-            <div class="check-opt"><input type="checkbox" id="s_5" value="Dançar e celebrar"><label for="s_5">Dançar e celebrar</label></div>
-            <div class="check-opt"><input type="checkbox" id="s_6" value="Ser homenageada"><label for="s_6">Ser homenageada</label></div>
-          </div>
-        </div>
-        <div class="field"><label>O que NÃO pode aparecer?</label><input type="text" id="nao" placeholder="Opcional — algum assunto sensível para evitar..."></div>
-        <div class="nav"><button class="btn-back" onclick="ir(3)">← Voltar</button><button class="btn-next" onclick="ir(5)">Próximo →</button></div>
-      </div>
-
-      <!-- STEP 5: GERAR + PLAYER + PAGAMENTO -->
-      <div class="step" id="s5">
-        <p class="step-label">Passo 5 de 5</p>
-        <h2 class="step-title">Sua Música</h2>
-        <p class="step-desc">Geramos 2 versões exclusivas para você escolher a favorita.</p>
-
-        <!-- Estado: pré-geração -->
-        <div id="pre-gerar">
-          <div class="preco-box">
-            <p class="preco-riscado">R$54</p>
-            <div class="preco-valor"><sup>R$</sup>27</div>
-            <p class="preco-tag">pagamento único · 50% OFF hoje</p>
-            <div class="beneficios">
-              <div class="beneficio"><span>🎵</span> Receba 2 versões para escolher</div>
-              <div class="beneficio"><span>🎧</span> Ouça antes de pagar — sem risco</div>
-              <div class="beneficio"><span>✅</span> Escolha a favorita e pague só por ela</div>
-              <div class="beneficio"><span>💾</span> Download liberado na hora após pagamento</div>
-            </div>
-          </div>
-          <button class="btn-gerar" onclick="gerarMusicas()">🎵 Criar minha música agora</button>
-          <div class="nav" style="margin-top:12px"><button class="btn-back" onclick="ir(4)">← Voltar</button><span></span></div>
-        </div>
-
-        <!-- Estado: carregando -->
-        <div id="carregando" style="display:none">
-          <div class="loading-box">
-            <div class="spinner"></div>
-            <h3>Criando suas músicas<span class="loading-dots"></span></h3>
-            <p>Estamos compondo sua música personalizada.<br>Isso leva cerca de <strong>1 a 2 minutos</strong>.<br><br>Não feche essa página! 🎵</p>
-          </div>
-        </div>
-
-        <!-- Estado: escolha + pagamento -->
-        <div id="escolha" style="display:none">
-          <p style="font-size:13px;color:#888;margin-bottom:14px">🎧 Ouça as versões e escolha a sua favorita:</p>
-          <div class="songs-list" id="songs-list"></div>
-
-          <div class="preco-box" style="margin-bottom:12px">
-            <p class="preco-riscado">R$54</p>
-            <div class="preco-valor"><sup>R$</sup>27</div>
-            <p class="preco-tag">pagamento único · 50% OFF hoje</p>
-          </div>
-
-          <button class="btn-pay" id="btn-pay" onclick="pagar()" disabled>
-            🔒 Pagar R$27 e baixar a versão escolhida
-          </button>
-          <div class="secure-badge">🔒 PIX, cartão de crédito e débito</div>
-        </div>
-      </div>
-
+<!-- DEPOIMENTOS -->
+<div class="depoimentos">
+  <h2>💬 O que nossos clientes dizem</h2>
+  <div class="depoimentos-grid">
+    <div class="depoimento-card">
+      <div class="depoimento-stars">⭐⭐⭐⭐⭐</div>
+      <div class="depoimento-texto">"Presentei minha mãe no aniversário de 60 anos com a música personalizada. Ela chorou tanto! Colocou nosso apelido, a cidade onde crescemos... ficou perfeito demais."</div>
+      <div class="depoimento-autor">— Camila R., São Paulo</div>
+    </div>
+    <div class="depoimento-card">
+      <div class="depoimento-stars">⭐⭐⭐⭐⭐</div>
+      <div class="depoimento-texto">"Pedi uma música sertaneja para o pedido de namoro. Quando ela ouviu com o nome dela e a história do nosso primeiro encontro, disse sim na hora! 🥰"</div>
+      <div class="depoimento-autor">— Lucas M., Belo Horizonte</div>
+    </div>
+    <div class="depoimento-card">
+      <div class="depoimento-stars">⭐⭐⭐⭐⭐</div>
+      <div class="depoimento-texto">"Fiz uma homenagem gospel para o pastor da nossa igreja. A congregação inteira emocionou. Vale muito mais do que R$27 — é uma lembrança para sempre."</div>
+      <div class="depoimento-autor">— Fernanda L., Curitiba</div>
     </div>
   </div>
 </div>
 
+<!-- FORMULÁRIO -->
+<div class="form-section">
+  <div class="form-title">🎵 Criar Minha Música Personalizada</div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-step active" id="ps1">1</div>
+    <div class="progress-step" id="ps2">2</div>
+    <div class="progress-step" id="ps3">3</div>
+    <div class="progress-step" id="ps4">4</div>
+    <div class="progress-step" id="ps5">5</div>
+  </div>
+
+  <!-- PASSO 1 - Ocasião -->
+  <div class="step active" id="step1">
+    <div class="step-label">Passo 1 de 5</div>
+    <h2>A Ocasião</h2>
+    <div class="field">
+      <label>Para qual momento especial é essa música? <span class="req">*</span></label>
+      <div class="opcoes" id="ocasiao-opcoes">
+        <div class="opcao" data-value="Casamento"><span class="emoji">💍</span>Casamento</div>
+        <div class="opcao" data-value="Aniversário"><span class="emoji">🎂</span>Aniversário</div>
+        <div class="opcao" data-value="Namoro"><span class="emoji">💑</span>Namoro</div>
+        <div class="opcao" data-value="Dia das Mães"><span class="emoji">👩</span>Dia das Mães</div>
+        <div class="opcao" data-value="Dia dos Pais"><span class="emoji">👨</span>Dia dos Pais</div>
+        <div class="opcao" data-value="Formatura"><span class="emoji">🎓</span>Formatura</div>
+        <div class="opcao" data-value="Homenagem"><span class="emoji">🙏</span>Homenagem</div>
+        <div class="opcao" data-value="Outro"><span class="emoji">🎵</span>Outro</div>
+      </div>
+    </div>
+    <div class="erro-box" id="erro1">Por favor, selecione a ocasião.</div>
+    <div class="btn-row">
+      <button class="btn-next" onclick="irPara(2)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- PASSO 2 - Para quem -->
+  <div class="step" id="step2">
+    <div class="step-label">Passo 2 de 5</div>
+    <h2>Para quem é?</h2>
+    <div class="field">
+      <label>Nome da pessoa <span class="req">*</span></label>
+      <input type="text" id="nome" placeholder="Ex: Maria, João..." maxlength="60" />
+    </div>
+    <div class="field">
+      <label>Qual sua relação com ela? <span class="req">*</span></label>
+      <input type="text" id="relacao" placeholder="Ex: minha mãe, minha namorada, meu filho..." maxlength="80" />
+    </div>
+    <div class="field">
+      <label>Como descreveria essa pessoa em 3 palavras? <span class="req">*</span></label>
+      <input type="text" id="palavras" placeholder="Ex: carinhosa, forte, alegre..." maxlength="100" />
+    </div>
+    <div class="field">
+      <label>Qual a memória mais especial que têm juntos? <span class="req">*</span></label>
+      <textarea id="memoria" placeholder="Conte com detalhes — quanto mais específico, mais emocionante fica a música!"></textarea>
+    </div>
+    <div class="erro-box" id="erro2">Por favor, preencha todos os campos obrigatórios.</div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="irPara(1)">← Voltar</button>
+      <button class="btn-next" onclick="irPara(3)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- PASSO 3 - Estilo -->
+  <div class="step" id="step3">
+    <div class="step-label">Passo 3 de 5</div>
+    <h2>Estilo da Música</h2>
+    <div class="field">
+      <label>Gênero musical <span class="req">*</span></label>
+      <div class="opcoes" id="genero-opcoes">
+        <div class="opcao" data-value="Pop"><span class="emoji">🎵</span>Pop</div>
+        <div class="opcao" data-value="Sertanejo"><span class="emoji">🤠</span>Sertanejo</div>
+        <div class="opcao" data-value="Gospel"><span class="emoji">✝️</span>Gospel</div>
+        <div class="opcao" data-value="Pagode"><span class="emoji">🥁</span>Pagode</div>
+        <div class="opcao" data-value="MPB"><span class="emoji">🎸</span>MPB</div>
+        <div class="opcao" data-value="Reggae"><span class="emoji">🌿</span>Reggae</div>
+        <div class="opcao" data-value="Rock"><span class="emoji">🎸</span>Rock</div>
+        <div class="opcao" data-value="Balada"><span class="emoji">🎹</span>Balada</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Clima da música <span class="req">*</span></label>
+      <div class="opcoes" id="clima-opcoes">
+        <div class="opcao" data-value="Alegre"><span class="emoji">😄</span>Alegre</div>
+        <div class="opcao" data-value="Emocionante"><span class="emoji">😢</span>Emocionante</div>
+        <div class="opcao" data-value="Romântico"><span class="emoji">🥰</span>Romântico</div>
+        <div class="opcao" data-value="Espiritual"><span class="emoji">🙏</span>Espiritual</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Algum cantor ou música de referência? <small style="color:#666">(opcional)</small></label>
+      <input type="text" id="referencia" placeholder="Opcional — ajuda a acertar o tom." maxlength="100" />
+    </div>
+    <div class="erro-box" id="erro3">Por favor, selecione gênero e clima.</div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="irPara(2)">← Voltar</button>
+      <button class="btn-next" onclick="irPara(4)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- PASSO 4 - Detalhes -->
+  <div class="step" id="step4">
+    <div class="step-label">Passo 4 de 5</div>
+    <h2>Detalhes Especiais</h2>
+    <div class="field">
+      <label>Frase, apelido ou expressão especial de vocês? <small style="color:#666">(opcional)</small></label>
+      <input type="text" id="frase" placeholder="Ex: 'minha vida toda', apelido carinhoso..." maxlength="120" />
+    </div>
+    <div class="field">
+      <label>Algum lugar, música ou coisa especial para vocês? <small style="color:#666">(opcional)</small></label>
+      <input type="text" id="lugar" placeholder="Ex: a praia onde se conheceram, uma música favorita..." maxlength="150" />
+    </div>
+    <div class="field">
+      <label>O que você quer que ela sinta ao ouvir? <small style="color:#666">(opcional)</small></label>
+      <div class="opcoes-sentimento" id="sentimento-opcoes">
+        <div class="opcao-sentimento" data-value="Chorar de emoção">Chorar de emoção</div>
+        <div class="opcao-sentimento" data-value="Sentir-se amada">Sentir-se amada</div>
+        <div class="opcao-sentimento" data-value="Sorrir e lembrar">Sorrir e lembrar</div>
+        <div class="opcao-sentimento" data-value="Sentir Deus perto">Sentir Deus perto</div>
+        <div class="opcao-sentimento" data-value="Dançar e celebrar">Dançar e celebrar</div>
+        <div class="opcao-sentimento" data-value="Ser homenageada">Ser homenageada</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>O que NÃO pode aparecer? <small style="color:#666">(opcional)</small></label>
+      <input type="text" id="nao-pode" placeholder="Ex: não mencionar divórcio, determinado nome..." maxlength="150" />
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="irPara(3)">← Voltar</button>
+      <button class="btn-next" onclick="irPara(5)">Próximo →</button>
+    </div>
+  </div>
+
+  <!-- PASSO 5 - Confirmar -->
+  <div class="step" id="step5">
+    <div class="step-label">Passo 5 de 5</div>
+    <h2>Sua Música</h2>
+    <p style="color:#888; margin-bottom:20px; font-size:14px;">Geramos 2 versões exclusivas para você escolher a favorita.</p>
+    <div class="preco-box">
+      <div class="preco-de">R$54</div>
+      <div class="preco-por">R$27</div>
+      <div class="preco-desc">pagamento único · 50% OFF hoje</div>
+      <ul class="preco-features">
+        <li>Receba 2 versões para escolher</li>
+        <li>Ouça antes de pagar — sem risco</li>
+        <li>Escolha a favorita e pague só por ela</li>
+        <li>Download liberado na hora após pagamento</li>
+      </ul>
+    </div>
+    <div class="btn-row">
+      <button class="btn-back" onclick="irPara(4)">← Voltar</button>
+      <button class="btn-next" onclick="gerarMusica()">🎵 Criar minha música agora</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-section">
+  <div class="spinner"></div>
+  <h2>Criando suas músicas</h2>
+  <p>Estamos compondo sua música personalizada.<br>Isso leva cerca de <strong>1 a 2 minutos</strong>.</p>
+  <p style="margin-top:12px; color:#666; font-size:13px;">Não feche essa página! 🎵</p>
+  <div class="loading-dots" style="margin-top:24px;">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- MÚSICAS -->
+<div id="musicas-section">
+  <h2>🎧 Ouça as versões e escolha a sua favorita:</h2>
+  <div id="musicas-lista"></div>
+
+  <div style="text-align:center; margin-top:8px;">
+    <div class="preco-de" style="font-size:14px; color:#666;">R$54</div>
+    <div class="preco-por" style="font-size:28px; color:#c4b5fd;">R$27</div>
+    <div style="font-size:13px; color:#666; margin-bottom:16px;">pagamento único · 50% OFF hoje</div>
+  </div>
+
+  <div id="btn-pagar-container" style="display:none; text-align:center;">
+    <button class="btn-pagar" id="btn-pagar-final" onclick="iniciarPagamento()">
+      🔒 Pagar R$27 e baixar a versão escolhida
+    </button>
+    <p class="pagamento-info">🔒 PIX, cartão de crédito e débito</p>
+  </div>
+
+  <div class="erro-box" id="erro-musicas" style="display:none; margin-top:12px;">
+    Selecione uma versão para continuar.
+  </div>
+</div>
+
+<!-- PAGAMENTO -->
+<div id="pagamento-section">
+  <h2>✅ Quase lá!</h2>
+  <p>Você será redirecionado para o Mercado Pago para finalizar.</p>
+  <div id="pagamento-link-container"></div>
+</div>
+
+<footer>
+  <p>© 2025 Música Personalizada · Feito com ❤️ para momentos especiais</p>
+</footer>
+
 <script>
-const TOTAL = 5;
-let atual = 1;
-let sessionId = null;
-let chosenIndex = null;
-
-function ir(n) {
-  document.getElementById('s'+atual).classList.remove('active');
-  document.getElementById('d'+atual).classList.remove('active');
-  document.getElementById('d'+atual).classList.add('done');
-  if(atual < TOTAL) document.getElementById('l'+atual)?.classList.add('done');
-  atual = n;
-  document.getElementById('s'+atual).classList.add('active');
-  document.getElementById('d'+atual).classList.remove('done');
-  document.getElementById('d'+atual).classList.add('active');
-  document.getElementById('prog').style.width = (atual/TOTAL*100)+'%';
-  if(n===5) fbq('track','InitiateCheckout',{value:27,currency:'BRL'});
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function getRadio(n){ const el=document.querySelector('input[name="'+n+'"]:checked'); return el?el.value:''; }
-function getChecks(){ return Array.from(document.querySelectorAll('.check-opt input:checked')).map(c=>c.value); }
-function v(id){ const el=document.getElementById(id); return el?.value?.trim()||''; }
-
-async function gerarMusicas() {
-  // Validação básica
-  if(!v('nome_p') || !v('memoria')) {
-    alert('Por favor, volte e preencha pelo menos o nome e a memória especial!');
-    return;
-  }
-
-  document.getElementById('pre-gerar').style.display = 'none';
-  document.getElementById('carregando').style.display = 'block';
-
-  const formData = {
-    ocasiao: getRadio('ocasiao'),
-    prazo: v('prazo'),
-    nome_p: v('nome_p'),
-    relacao: v('relacao'),
-    palavras: v('palavras'),
-    memoria: v('memoria'),
-    estilo: getRadio('estilo'),
-    clima: getRadio('clima'),
-    ref: v('ref'),
-    frase: v('frase'),
-    especial: v('especial'),
-    sentir: getChecks(),
-    nao: v('nao')
+  // ─── ESTADO ───────────────────────────────────
+  const dados = {
+    ocasiao: '',
+    nome: '',
+    relacao: '',
+    palavras: '',
+    memoria: '',
+    genero: '',
+    clima: '',
+    referencia: '',
+    frase: '',
+    lugar: '',
+    sentimento: '',
+    naoPode: ''
   };
 
-  try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+  let musicaSelecionada = null;
+  let taskIds = [];
+  let pollingInterval = null;
+
+  // ─── NAVEGAÇÃO ────────────────────────────────
+  function irPara(passo) {
+    if (passo > 1 && !validarPasso(passo - 1)) return;
+
+    // Coletar dados do passo atual
+    coletarDados(passo - 1);
+
+    // Esconder todos os passos
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.progress-step').forEach((ps, i) => {
+      ps.classList.remove('active', 'done');
+      if (i < passo - 1) ps.classList.add('done');
+      else if (i === passo - 1) ps.classList.add('active');
     });
-    const data = await res.json();
-    if (!data.sessionId) throw new Error(data.error || 'Erro ao iniciar geração');
-    sessionId = data.sessionId;
-    aguardarMusicas();
-  } catch(err) {
-    alert('Erro: ' + err.message);
-    document.getElementById('pre-gerar').style.display = 'block';
-    document.getElementById('carregando').style.display = 'none';
+
+    const el = document.getElementById('step' + passo);
+    if (el) el.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-}
 
-async function aguardarMusicas() {
-  const MAX_TENTATIVAS = 40; // ~2 minutos
-  let tentativas = 0;
+  function validarPasso(passo) {
+    document.querySelectorAll('.erro-box').forEach(e => e.style.display = 'none');
 
-  const poll = async () => {
-    tentativas++;
-    if (tentativas > MAX_TENTATIVAS) {
-      alert('A geração está demorando mais que o esperado. Por favor, recarregue a página e tente novamente.');
+    if (passo === 1) {
+      if (!dados.ocasiao) {
+        document.getElementById('erro1').style.display = 'block';
+        return false;
+      }
+    }
+    if (passo === 2) {
+      const nome = document.getElementById('nome').value.trim();
+      const relacao = document.getElementById('relacao').value.trim();
+      const palavras = document.getElementById('palavras').value.trim();
+      const memoria = document.getElementById('memoria').value.trim();
+      if (!nome || !relacao || !palavras || !memoria) {
+        document.getElementById('erro2').style.display = 'block';
+        return false;
+      }
+    }
+    if (passo === 3) {
+      if (!dados.genero || !dados.clima) {
+        document.getElementById('erro3').style.display = 'block';
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function coletarDados(passo) {
+    if (passo === 2) {
+      dados.nome = document.getElementById('nome').value.trim();
+      dados.relacao = document.getElementById('relacao').value.trim();
+      dados.palavras = document.getElementById('palavras').value.trim();
+      dados.memoria = document.getElementById('memoria').value.trim();
+    }
+    if (passo === 3) {
+      dados.referencia = document.getElementById('referencia').value.trim();
+    }
+    if (passo === 4) {
+      dados.frase = document.getElementById('frase').value.trim();
+      dados.lugar = document.getElementById('lugar').value.trim();
+      dados.naoPode = document.getElementById('nao-pode').value.trim();
+    }
+  }
+
+  // ─── OPÇÕES CLICÁVEIS ─────────────────────────
+  function setupOpcoes(containerId, campo, multiple) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('.opcao, .opcao-sentimento').forEach(el => {
+      el.addEventListener('click', () => {
+        if (multiple) {
+          el.classList.toggle('selected');
+          const selecionados = [...container.querySelectorAll('.selected')].map(e => e.dataset.value);
+          dados[campo] = selecionados.join(', ');
+        } else {
+          container.querySelectorAll('.opcao, .opcao-sentimento').forEach(o => o.classList.remove('selected'));
+          el.classList.add('selected');
+          dados[campo] = el.dataset.value;
+        }
+      });
+    });
+  }
+
+  setupOpcoes('ocasiao-opcoes', 'ocasiao', false);
+  setupOpcoes('genero-opcoes', 'genero', false);
+  setupOpcoes('clima-opcoes', 'clima', false);
+  setupOpcoes('sentimento-opcoes', 'sentimento', true);
+
+  // ─── GERAR MÚSICA ─────────────────────────────
+  async function gerarMusica() {
+    // Coletar últimos dados
+    dados.nome = document.getElementById('nome').value.trim();
+    dados.relacao = document.getElementById('relacao').value.trim();
+    dados.palavras = document.getElementById('palavras').value.trim();
+    dados.memoria = document.getElementById('memoria').value.trim();
+    dados.referencia = document.getElementById('referencia').value.trim();
+    dados.frase = document.getElementById('frase').value.trim();
+    dados.lugar = document.getElementById('lugar').value.trim();
+    dados.naoPode = document.getElementById('nao-pode').value.trim();
+
+    // Validação final
+    if (!dados.ocasiao || !dados.nome || !dados.relacao || !dados.genero || !dados.clima) {
+      alert('Por favor, volte e preencha todos os campos obrigatórios.');
       return;
     }
 
+    // Mostrar loading
+    document.querySelector('.form-section').style.display = 'none';
+    document.getElementById('loading-section').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     try {
-      const res = await fetch('/api/status/'+sessionId);
-      const data = await res.json();
+      const res = await fetch('/api/gerar-musica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+      });
 
-      if (data.status === 'done' && data.songs?.length >= 2) {
-        mostrarMusicas(data.songs);
-      } else {
-        setTimeout(poll, 3000);
-      }
-    } catch(err) {
-      setTimeout(poll, 3000);
+      if (!res.ok) throw new Error('Erro ao iniciar geração');
+
+      const json = await res.json();
+      taskIds = json.taskIds || [];
+
+      if (!taskIds.length) throw new Error('Nenhuma tarefa retornada');
+
+      aguardarMusicas(taskIds);
+
+    } catch (err) {
+      console.error(err);
+      mostrarErroGeral('Ocorreu um erro ao gerar a música. Por favor, tente novamente.');
     }
-  };
-
-  setTimeout(poll, 5000);
-}
-
-function mostrarMusicas(songs) {
-  fbq('track','ViewContent');
-  document.getElementById('carregando').style.display = 'none';
-  document.getElementById('escolha').style.display = 'block';
-
-  const list = document.getElementById('songs-list');
-  list.innerHTML = '';
-
-  songs.forEach((song, i) => {
-    const card = document.createElement('div');
-    card.className = 'song-card';
-    card.id = 'card-'+i;
-    card.innerHTML = `
-      <div class="song-card-header">
-        <div class="song-num">${i+1}</div>
-        <span class="song-title">${song.title || 'Versão '+(i+1)}</span>
-        <button class="song-select-btn" id="btn-sel-${i}" onclick="event.stopPropagation();selecionarMusica(${i})">
-          ✓ Escolher
-        </button>
-      </div>
-      <audio controls controlsList="nodownload" oncontextmenu="return false" src="/api/stream/${sessionId}/${i}">
-        Seu navegador não suporta áudio.
-      </audio>
-    `;
-    card.addEventListener('click', () => selecionarMusica(i));
-    list.appendChild(card);
-  });
-}
-
-function selecionarMusica(index) {
-  document.querySelectorAll('.song-card').forEach(c => c.classList.remove('selected'));
-  document.querySelectorAll('.song-select-btn').forEach(b => b.textContent = '✓ Escolher');
-  document.getElementById('card-'+index)?.classList.add('selected');
-  var selBtn = document.getElementById('btn-sel-'+index);
-  if (selBtn) selBtn.textContent = '✅ Selecionada!';
-  chosenIndex = index;
-  document.getElementById('btn-pay').disabled = false;
-  document.getElementById('btn-pay').textContent = '🔒 Pagar R$27 e baixar a Versão '+(index+1);
-  document.getElementById('btn-pay').scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-async function pagar() {
-  if (chosenIndex === null) { alert('Escolha uma versão antes de pagar!'); return; }
-  fbq('track','Lead');
-
-  const btn = document.getElementById('btn-pay');
-  btn.disabled = true;
-  btn.textContent = 'Redirecionando...';
-
-  try {
-    const res = await fetch('/api/payment', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId, chosenIndex })
-    });
-    const data = await res.json();
-    if (data.checkoutUrl) {
-      window.location.href = data.checkoutUrl;
-    } else {
-      throw new Error(data.error || 'Erro ao criar pagamento');
-    }
-  } catch(err) {
-    alert('Erro: '+err.message);
-    btn.disabled = false;
-    btn.textContent = `🔒 Pagar R$27 e baixar a Versão ${chosenIndex+1}`;
   }
-}
+
+  function aguardarMusicas(ids) {
+    let tentativas = 0;
+    const maxTentativas = 60; // 2 minutos
+
+    pollingInterval = setInterval(async () => {
+      tentativas++;
+      if (tentativas > maxTentativas) {
+        clearInterval(pollingInterval);
+        mostrarErroGeral('A geração demorou mais que o esperado. Por favor, tente novamente.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/status-musica', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskIds: ids })
+        });
+
+        if (!res.ok) return;
+
+        const json = await res.json();
+
+        if (json.status === 'completed' && json.musicas && json.musicas.length >= 2) {
+          clearInterval(pollingInterval);
+          mostrarMusicas(json.musicas);
+        }
+      } catch (e) {
+        console.error('Polling error:', e);
+      }
+    }, 2000);
+  }
+
+  function mostrarMusicas(musicas) {
+    document.getElementById('loading-section').style.display = 'none';
+    const sec = document.getElementById('musicas-section');
+    sec.style.display = 'block';
+
+    const lista = document.getElementById('musicas-lista');
+    lista.innerHTML = '';
+
+    musicas.slice(0, 2).forEach((m, i) => {
+      const card = document.createElement('div');
+      card.className = 'musica-card';
+      card.id = 'musica-card-' + i;
+
+      card.innerHTML = `
+        <h3>🎵 Versão ${i + 1}</h3>
+        <div class="player-protegido">
+          <audio controls controlsList="nodownload" preload="metadata">
+            <source src="${m.url}" type="audio/mpeg" />
+          </audio>
+        </div>
+        <button class="btn-escolher" id="btn-escolher-${i}" onclick="escolherMusica(${i}, '${m.url}')">
+          ✅ Escolher esta versão
+        </button>
+      `;
+
+      lista.appendChild(card);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function escolherMusica(index, url) {
+    musicaSelecionada = { index, url };
+
+    document.querySelectorAll('.musica-card').forEach((c, i) => {
+      c.classList.toggle('selecionada', i === index);
+    });
+    document.querySelectorAll('[id^="btn-escolher-"]').forEach((b, i) => {
+      if (i === index) {
+        b.textContent = '✅ Versão escolhida!';
+        b.classList.add('chosen');
+      } else {
+        b.textContent = '✅ Escolher esta versão';
+        b.classList.remove('chosen');
+      }
+    });
+
+    document.getElementById('btn-pagar-container').style.display = 'block';
+    document.getElementById('erro-musicas').style.display = 'none';
+
+    setTimeout(() => {
+      document.getElementById('btn-pagar-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  }
+
+  // ─── PAGAMENTO ────────────────────────────────
+  async function iniciarPagamento() {
+    if (!musicaSelecionada) {
+      document.getElementById('erro-musicas').style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('btn-pagar-final');
+    btn.textContent = '⏳ Gerando pagamento...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/criar-pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          musicaUrl: musicaSelecionada.url,
+          musicaIndex: musicaSelecionada.index,
+          dadosCliente: dados
+        })
+      });
+
+      if (!res.ok) throw new Error('Erro ao criar pagamento');
+
+      const json = await res.json();
+
+      if (json.init_point) {
+        window.location.href = json.init_point;
+      } else {
+        throw new Error('Link de pagamento não encontrado');
+      }
+    } catch (err) {
+      console.error(err);
+      btn.textContent = '🔒 Pagar R$27 e baixar a versão escolhida';
+      btn.disabled = false;
+      alert('Erro ao gerar pagamento. Tente novamente.');
+    }
+  }
+
+  // ─── ERRO GERAL ───────────────────────────────
+  function mostrarErroGeral(msg) {
+    document.getElementById('loading-section').style.display = 'none';
+    document.querySelector('.form-section').style.display = 'block';
+    document.getElementById('step5').classList.add('active');
+    alert(msg);
+  }
 </script>
 </body>
 </html>
