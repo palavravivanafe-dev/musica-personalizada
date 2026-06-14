@@ -320,6 +320,9 @@
     });
     const el = document.getElementById('step'+passo);
     if (el) el.classList.add('active');
+    // Esconde depoimentos a partir do passo 2
+    const dep = document.querySelector('.depoimentos');
+    if (dep) dep.style.display = passo === 1 ? 'block' : 'none';
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
