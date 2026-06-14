@@ -5,19 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Criar Minha Música Personalizada</title>
   <meta name="description" content="Transforme sua história em uma música inesquecível. 100% original, ouça antes de pagar." />
+  <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','2100902017041343');fbq('track','PageView');</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2100902017041343&ev=PageView&noscript=1"/></noscript>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0a0f; color: #f0f0f0; min-height: 100vh; }
-
     .header { background: linear-gradient(135deg, #1a0a2e 0%, #0d0d1a 100%); border-bottom: 1px solid #2a1a4a; padding: 14px 20px; text-align: center; }
     .header-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.3); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #c4b5fd; }
-
     .hero { background: linear-gradient(135deg, #1a0a2e 0%, #0d1a2e 50%, #0a0a0f 100%); padding: 50px 20px 40px; text-align: center; }
     .hero h1 { font-size: clamp(26px, 5vw, 42px); font-weight: 800; line-height: 1.2; margin-bottom: 16px; background: linear-gradient(135deg, #fff 30%, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .hero p { font-size: 16px; color: #a0a0c0; max-width: 520px; margin: 0 auto 28px; line-height: 1.6; }
     .hero-badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
     .hero-badge { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #d0d0e8; }
-
     .depoimentos { background: #0f0f1a; padding: 40px 20px; }
     .depoimentos h2 { text-align: center; font-size: 22px; color: #c4b5fd; margin-bottom: 24px; }
     .depoimentos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
@@ -25,20 +24,16 @@
     .depoimento-stars { color: #f59e0b; font-size: 15px; margin-bottom: 10px; }
     .depoimento-texto { font-size: 14px; color: #c0c0d8; line-height: 1.6; margin-bottom: 12px; }
     .depoimento-autor { font-size: 13px; color: #8b5cf6; font-weight: 600; }
-
     .form-section { padding: 40px 20px 60px; max-width: 620px; margin: 0 auto; }
     .form-title { text-align: center; font-size: 22px; font-weight: 700; margin-bottom: 28px; color: #e0e0ff; }
-
     .progress-bar { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; }
     .progress-step { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #2a1a4a; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #555; transition: all 0.3s; }
     .progress-step.active { border-color: #8b5cf6; background: #8b5cf6; color: #fff; }
     .progress-step.done { border-color: #6d28d9; background: #6d28d9; color: #fff; }
-
     .step { display: none; }
     .step.active { display: block; }
     .step-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #8b5cf6; margin-bottom: 6px; }
     .step h2 { font-size: 24px; font-weight: 700; margin-bottom: 24px; color: #f0f0ff; }
-
     label { display: block; font-size: 14px; color: #b0b0c8; margin-bottom: 6px; font-weight: 500; }
     label span.req { color: #f87171; }
     .field { margin-bottom: 20px; }
@@ -46,25 +41,21 @@
     input[type="text"]:focus, textarea:focus, select:focus { border-color: #8b5cf6; }
     textarea { resize: vertical; min-height: 90px; }
     select option { background: #1a1a2e; }
-
     .opcoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 8px; }
     .opcao { border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 8px; text-align: center; font-size: 14px; color: #c0c0d8; cursor: pointer; transition: all 0.2s; user-select: none; }
     .opcao:hover { border-color: #8b5cf6; color: #e0e0ff; }
     .opcao.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.15); color: #fff; }
     .opcao .emoji { display: block; font-size: 22px; margin-bottom: 4px; }
-
     .opcoes-sentimento { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
     .opcao-sentimento { border: 2px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 16px; font-size: 13px; color: #c0c0d8; cursor: pointer; transition: all 0.2s; user-select: none; }
     .opcao-sentimento:hover { border-color: #8b5cf6; }
     .opcao-sentimento.selected { border-color: #8b5cf6; background: rgba(139,92,246,0.15); color: #fff; }
-
     .btn-row { display: flex; gap: 12px; margin-top: 32px; }
     .btn-back { flex: 0 0 auto; background: transparent; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px 20px; font-size: 15px; color: #a0a0c0; cursor: pointer; transition: all 0.2s; }
     .btn-back:hover { border-color: rgba(255,255,255,0.3); color: #e0e0ff; }
     .btn-next { flex: 1; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 10px; padding: 14px 24px; font-size: 16px; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 20px rgba(109,40,217,0.4); }
     .btn-next:hover { background: linear-gradient(135deg, #8b5cf6, #7c3aed); transform: translateY(-1px); }
     .btn-next:active { transform: translateY(0); }
-
     .preco-box { background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.3); border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 24px; }
     .preco-de { font-size: 14px; color: #888; text-decoration: line-through; }
     .preco-por { font-size: 36px; font-weight: 800; color: #c4b5fd; }
@@ -72,7 +63,6 @@
     .preco-features { margin-top: 14px; text-align: left; }
     .preco-features li { font-size: 14px; color: #c0c0d8; padding: 4px 0; list-style: none; }
     .preco-features li::before { content: '✅ '; }
-
     #loading-section { display: none; text-align: center; padding: 60px 20px; }
     .spinner { width: 56px; height: 56px; border: 4px solid rgba(139,92,246,0.2); border-top-color: #8b5cf6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -82,7 +72,6 @@
     .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
     .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-
     #musicas-section { display: none; padding: 20px; max-width: 620px; margin: 0 auto 60px; }
     #musicas-section h2 { font-size: 22px; color: #c4b5fd; text-align: center; margin-bottom: 20px; }
     .musica-card { background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.2); border-radius: 14px; padding: 20px; margin-bottom: 16px; transition: border-color 0.2s; }
@@ -90,19 +79,14 @@
     .musica-card h3 { font-size: 16px; color: #e0e0ff; margin-bottom: 12px; }
     .player-protegido { position: relative; width: 100%; }
     .player-protegido audio { width: 100%; }
-
     .btn-escolher { width: 100%; margin-top: 14px; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; color: #fff; cursor: pointer; transition: all 0.2s; }
     .btn-escolher:hover { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
     .btn-escolher.chosen { background: linear-gradient(135deg, #059669, #047857); }
-
     .btn-pagar { display: inline-block; background: linear-gradient(135deg, #059669, #047857); color: #fff; text-decoration: none; border-radius: 12px; padding: 16px 32px; font-size: 18px; font-weight: 700; cursor: pointer; border: none; width: 100%; max-width: 400px; box-shadow: 0 4px 20px rgba(5,150,105,0.4); transition: all 0.2s; }
     .btn-pagar:hover { transform: translateY(-2px); }
     .pagamento-info { margin-top: 14px; font-size: 13px; color: #666; }
-
     .erro-box { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 16px; color: #fca5a5; font-size: 14px; margin-top: 12px; display: none; }
-
     footer { text-align: center; padding: 30px 20px; border-top: 1px solid rgba(255,255,255,0.06); color: #444; font-size: 13px; }
-
     @media (max-width: 480px) {
       .opcoes { grid-template-columns: repeat(2, 1fr); }
       .btn-row { flex-direction: column-reverse; }
@@ -149,7 +133,6 @@
 
 <div class="form-section">
   <div class="form-title">🎵 Criar Minha Música Personalizada</div>
-
   <div class="progress-bar">
     <div class="progress-step active" id="ps1">1</div>
     <div class="progress-step" id="ps2">2</div>
@@ -158,7 +141,6 @@
     <div class="progress-step" id="ps5">5</div>
   </div>
 
-  <!-- PASSO 1 -->
   <div class="step active" id="step1">
     <div class="step-label">Passo 1 de 5</div>
     <h2>A Ocasião</h2>
@@ -176,12 +158,9 @@
       </div>
     </div>
     <div class="erro-box" id="erro1">Por favor, selecione a ocasião.</div>
-    <div class="btn-row">
-      <button class="btn-next" onclick="irPara(2)">Próximo →</button>
-    </div>
+    <div class="btn-row"><button class="btn-next" onclick="irPara(2)">Próximo →</button></div>
   </div>
 
-  <!-- PASSO 2 -->
   <div class="step" id="step2">
     <div class="step-label">Passo 2 de 5</div>
     <h2>Para quem é?</h2>
@@ -208,7 +187,6 @@
     </div>
   </div>
 
-  <!-- PASSO 3 -->
   <div class="step" id="step3">
     <div class="step-label">Passo 3 de 5</div>
     <h2>Estilo da Música</h2>
@@ -245,7 +223,6 @@
     </div>
   </div>
 
-  <!-- PASSO 4 -->
   <div class="step" id="step4">
     <div class="step-label">Passo 4 de 5</div>
     <h2>Detalhes Especiais</h2>
@@ -274,7 +251,6 @@
     </div>
   </div>
 
-  <!-- PASSO 5 -->
   <div class="step" id="step5">
     <div class="step-label">Passo 5 de 5</div>
     <h2>Sua Música</h2>
@@ -297,16 +273,14 @@
   </div>
 </div>
 
-<!-- LOADING -->
 <div id="loading-section">
   <div class="spinner"></div>
   <h2>Criando suas músicas</h2>
-  <p>Estamos compondo sua música personalizada.<br>Isso leva cerca de <strong>1 a 2 minutos</strong>.</p>
+  <p>Estamos compondo sua música personalizada.<br>Isso leva cerca de <strong>2 a 4 minutos</strong>.</p>
   <p style="margin-top:12px; color:#666; font-size:13px;">Não feche essa página! 🎵</p>
   <div class="loading-dots" style="margin-top:24px;"><span></span><span></span><span></span></div>
 </div>
 
-<!-- MÚSICAS -->
 <div id="musicas-section">
   <h2>🎧 Ouça as versões e escolha a sua favorita:</h2>
   <div id="musicas-lista"></div>
@@ -332,6 +306,8 @@
   let musicaSelecionada = null;
   let songs = [];
   let pollingTimer = null;
+
+  fbq('track', 'ViewContent', {content_name: 'Musica Personalizada', value: 27, currency: 'BRL'});
 
   function irPara(passo) {
     if (passo > 1 && !validarPasso(passo - 1)) return;
@@ -414,6 +390,7 @@
     document.querySelector('.form-section').style.display='none';
     document.getElementById('loading-section').style.display='block';
     window.scrollTo({top:0,behavior:'smooth'});
+    fbq('track', 'Lead', {value: 27, currency: 'BRL'});
 
     try {
       const res = await fetch('/api/generate', {
@@ -436,7 +413,7 @@
     let tentativas = 0;
     pollingTimer = setInterval(async () => {
       tentativas++;
-      if (tentativas > 60) {
+      if (tentativas > 150) {
         clearInterval(pollingTimer);
         mostrarErroGeral('A geração demorou mais que o esperado. Tente novamente.');
         return;
@@ -487,6 +464,7 @@
     });
     document.getElementById('btn-pagar-container').style.display='block';
     document.getElementById('erro-musicas').style.display='none';
+    fbq('track', 'InitiateCheckout', {value: 27, currency: 'BRL'});
     setTimeout(() => document.getElementById('btn-pagar-container').scrollIntoView({behavior:'smooth',block:'center'}), 300);
   }
 
