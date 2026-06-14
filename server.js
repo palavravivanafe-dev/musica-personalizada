@@ -204,6 +204,7 @@ app.post('/api/payment', async (req, res) => {
           pending: BASE_URL + '/sucesso?session=' + sessionId
         },
         auto_approve: true,
+        payment_methods: { excluded_payment_types: [{id:"ticket"},{id:"atm"}], installments: 1 },
         notification_url: BASE_URL + '/api/webhook',
         external_reference: sessionId + ':' + chosenIndex
       }
