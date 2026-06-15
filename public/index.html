@@ -11,45 +11,45 @@
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@400;500;600;700&display=swap');
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #f0f0f0; min-height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: #102a4a; color: #e8edf5; min-height: 100vh; }
 
-    /* CORES PREMIUM */
     :root {
       --gold: #C9A84C;
       --gold-light: #E8C97A;
       --gold-dark: #8B6914;
-      --black: #0a0a0a;
-      --black-2: #111111;
-      --black-3: #1a1a1a;
+      --navy: #102a4a;
+      --navy-2: #163352;
+      --navy-3: #1b3d60;
+      --navy-4: #214872;
       --white: #ffffff;
-      --white-soft: #f5f5f0;
-      --gray: #888888;
-      --gray-light: #cccccc;
+      --text: #e8edf5;
+      --text-soft: #a8b8cc;
+      --gray: #6a7f94;
     }
 
     /* HEADER */
-    .header { background: #000; border-bottom: 1px solid rgba(201,168,76,0.3); padding: 14px 20px; text-align: center; }
-    .header-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.4); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--gold-light); letter-spacing: 0.5px; }
+    .header { background: #0d2240; border-bottom: 1px solid rgba(201,168,76,0.25); padding: 14px 20px; text-align: center; }
+    .header-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.35); border-radius: 20px; padding: 6px 16px; font-size: 13px; color: var(--gold-light); letter-spacing: 0.5px; }
 
     /* HERO */
-    .hero { background: linear-gradient(160deg, #000 0%, #0f0f0f 40%, #1a1500 100%); padding: 60px 20px 50px; text-align: center; position: relative; overflow: hidden; }
-    .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 60%); pointer-events: none; }
+    .hero { background: linear-gradient(160deg, #0d2240 0%, #102a4a 50%, #133260 100%); padding: 60px 20px 50px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -30%; left: -20%; width: 140%; height: 160%; background: radial-gradient(ellipse at 60% 40%, rgba(201,168,76,0.07) 0%, transparent 60%); pointer-events: none; }
     .hero-tag { display: inline-block; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 4px; padding: 4px 12px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
     .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 52px); font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: var(--white); }
     .hero h1 span { color: var(--gold-light); }
-    .hero p { font-size: 16px; color: #aaa; max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
+    .hero p { font-size: 16px; color: var(--text-soft); max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
     .hero-badges { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
-    .hero-badge { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 14px; font-size: 12px; color: #aaa; letter-spacing: 0.3px; }
+    .hero-badge { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 6px 14px; font-size: 12px; color: var(--text-soft); }
 
     /* DEPOIMENTOS */
-    .depoimentos { background: var(--black-2); padding: 50px 20px; border-top: 1px solid rgba(201,168,76,0.15); border-bottom: 1px solid rgba(201,168,76,0.15); }
+    .depoimentos { background: var(--navy-2); padding: 50px 20px; border-top: 1px solid rgba(201,168,76,0.15); border-bottom: 1px solid rgba(201,168,76,0.15); }
     .depoimentos h2 { text-align: center; font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold-light); margin-bottom: 8px; }
     .depoimentos-sub { text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 32px; }
     .depoimentos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; }
-    .depoimento-card { background: var(--black-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 8px; padding: 24px; transition: border-color 0.2s; }
+    .depoimento-card { background: var(--navy-3); border: 1px solid rgba(201,168,76,0.15); border-radius: 8px; padding: 24px; transition: border-color 0.2s; }
     .depoimento-card:hover { border-color: rgba(201,168,76,0.35); }
     .depoimento-stars { color: var(--gold); font-size: 13px; margin-bottom: 12px; letter-spacing: 2px; }
-    .depoimento-texto { font-size: 14px; color: #bbb; line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+    .depoimento-texto { font-size: 14px; color: var(--text-soft); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
     .depoimento-autor { font-size: 12px; color: var(--gold); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
 
     /* FORMULÁRIO */
@@ -59,10 +59,10 @@
 
     /* PROGRESS */
     .progress-bar { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 36px; }
-    .progress-step { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #333; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #555; transition: all 0.3s; flex-shrink: 0; }
+    .progress-step { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--gray); transition: all 0.3s; flex-shrink: 0; }
     .progress-step.active { border-color: var(--gold); background: var(--gold); color: #000; }
     .progress-step.done { border-color: var(--gold-dark); background: var(--gold-dark); color: #000; }
-    .progress-line { width: 32px; height: 1.5px; background: #222; flex-shrink: 0; }
+    .progress-line { width: 32px; height: 1.5px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
     .progress-line.done { background: var(--gold-dark); }
 
     /* PASSOS */
@@ -72,52 +72,52 @@
     .step h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 28px; color: var(--white); }
 
     /* CAMPOS */
-    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px; }
+    label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin-bottom: 8px; }
     label span.req { color: var(--gold); }
     .field { margin-bottom: 22px; }
-    input[type="text"], textarea { width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 6px; padding: 13px 16px; font-size: 15px; color: var(--white); outline: none; transition: border-color 0.2s; font-family: 'Inter', sans-serif; }
-    input[type="text"]:focus, textarea:focus { border-color: var(--gold); }
-    input[type="text"]::placeholder, textarea::placeholder { color: #444; }
+    input[type="text"], textarea { width: 100%; background: var(--navy-2); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 13px 16px; font-size: 15px; color: var(--text); outline: none; transition: border-color 0.2s; font-family: 'Inter', sans-serif; }
+    input[type="text"]:focus, textarea:focus { border-color: var(--gold); background: var(--navy-3); }
+    input[type="text"]::placeholder, textarea::placeholder { color: var(--gray); }
     textarea { resize: vertical; min-height: 90px; }
 
     /* OPÇÕES */
     .opcoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-bottom: 8px; }
-    .opcao { border: 1px solid #222; border-radius: 6px; padding: 12px 8px; text-align: center; font-size: 13px; color: #777; cursor: pointer; transition: all 0.2s; user-select: none; background: #111; }
-    .opcao:hover { border-color: var(--gold-dark); color: #ccc; }
-    .opcao.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); color: var(--gold-light); }
+    .opcao { border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px 8px; text-align: center; font-size: 13px; color: var(--text-soft); cursor: pointer; transition: all 0.2s; user-select: none; background: var(--navy-2); }
+    .opcao:hover { border-color: rgba(201,168,76,0.4); color: var(--text); background: var(--navy-3); }
+    .opcao.selected { border-color: var(--gold); background: rgba(201,168,76,0.12); color: var(--gold-light); }
     .opcao .emoji { display: block; font-size: 20px; margin-bottom: 5px; }
     .opcoes-sentimento { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-    .opcao-sentimento { border: 1px solid #222; border-radius: 4px; padding: 7px 14px; font-size: 12px; color: #777; cursor: pointer; transition: all 0.2s; user-select: none; background: #111; letter-spacing: 0.3px; }
-    .opcao-sentimento:hover { border-color: var(--gold-dark); }
-    .opcao-sentimento.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); color: var(--gold-light); }
+    .opcao-sentimento { border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 7px 14px; font-size: 12px; color: var(--text-soft); cursor: pointer; transition: all 0.2s; user-select: none; background: var(--navy-2); }
+    .opcao-sentimento:hover { border-color: rgba(201,168,76,0.4); }
+    .opcao-sentimento.selected { border-color: var(--gold); background: rgba(201,168,76,0.12); color: var(--gold-light); }
 
     /* BOTÕES */
     .btn-row { display: flex; gap: 12px; margin-top: 32px; }
-    .btn-back { flex: 0 0 auto; background: transparent; border: 1px solid #2a2a2a; border-radius: 6px; padding: 13px 20px; font-size: 14px; color: #666; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .btn-back:hover { border-color: #444; color: #aaa; }
+    .btn-back { flex: 0 0 auto; background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 13px 20px; font-size: 14px; color: var(--gray); cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .btn-back:hover { border-color: rgba(255,255,255,0.2); color: var(--text-soft); }
     .btn-next { flex: 1; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); border: none; border-radius: 6px; padding: 14px 24px; font-size: 15px; font-weight: 700; color: #000; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px; font-family: 'Inter', sans-serif; }
-    .btn-next:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,168,76,0.3); }
+    .btn-next:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(201,168,76,0.25); }
     .btn-next:active { transform: translateY(0); }
 
     /* PREÇO */
-    .preco-box { background: #111; border: 1px solid rgba(201,168,76,0.3); border-radius: 8px; padding: 28px; text-align: center; margin-bottom: 24px; position: relative; overflow: hidden; }
+    .preco-box { background: var(--navy-2); border: 1px solid rgba(201,168,76,0.25); border-radius: 8px; padding: 28px; text-align: center; margin-bottom: 24px; position: relative; overflow: hidden; }
     .preco-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
     .preco-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 8px; }
-    .preco-de { font-size: 14px; color: #555; text-decoration: line-through; margin-bottom: 4px; }
+    .preco-de { font-size: 14px; color: var(--gray); text-decoration: line-through; margin-bottom: 4px; }
     .preco-por { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 800; color: var(--white); line-height: 1; }
     .preco-por span { font-size: 22px; vertical-align: super; color: var(--gold-light); }
-    .preco-desc { font-size: 12px; color: #666; margin-top: 6px; margin-bottom: 16px; }
-    .preco-divider { border: none; border-top: 1px solid #222; margin: 16px 0; }
+    .preco-desc { font-size: 12px; color: var(--gray); margin-top: 6px; margin-bottom: 16px; }
+    .preco-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 16px 0; }
     .preco-features { text-align: left; }
-    .preco-features li { font-size: 13px; color: #aaa; padding: 5px 0; list-style: none; display: flex; align-items: center; gap: 8px; }
+    .preco-features li { font-size: 13px; color: var(--text-soft); padding: 5px 0; list-style: none; display: flex; align-items: center; gap: 8px; }
     .preco-features li::before { content: '✦'; color: var(--gold); font-size: 10px; }
 
     /* LOADING */
     #loading-section { display: none; text-align: center; padding: 80px 20px; }
-    .spinner-gold { width: 48px; height: 48px; border: 2px solid #222; border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 28px; }
+    .spinner-gold { width: 48px; height: 48px; border: 2px solid rgba(255,255,255,0.08); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 28px; }
     @keyframes spin { to { transform: rotate(360deg); } }
     #loading-section h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--white); margin-bottom: 10px; }
-    #loading-section p { color: #666; font-size: 14px; line-height: 1.7; }
+    #loading-section p { color: var(--gray); font-size: 14px; line-height: 1.7; }
     .loading-dots { margin-top: 24px; }
     .loading-dots span { display: inline-block; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; margin: 0 3px; animation: bounce 1.2s infinite ease-in-out; }
     .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
@@ -127,23 +127,21 @@
     /* PLAYER */
     #musicas-section { display: none; padding: 20px; max-width: 580px; margin: 0 auto 60px; }
     #musicas-section h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--white); text-align: center; margin-bottom: 8px; }
-    #musicas-section p { text-align: center; font-size: 13px; color: #666; margin-bottom: 24px; }
-    .musica-card { background: #111; border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 24px; margin-bottom: 16px; }
-    .musica-card h3 { font-size: 14px; color: var(--gold-light); margin-bottom: 16px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    #musicas-section p { text-align: center; font-size: 13px; color: var(--gray); margin-bottom: 24px; }
+    .musica-card { background: var(--navy-2); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+    .musica-card h3 { font-size: 13px; color: var(--gold-light); margin-bottom: 16px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
     .player-protegido audio { width: 100%; accent-color: var(--gold); }
-
-    .preco-box-player { background: #111; border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0 16px; }
+    .preco-box-player { background: var(--navy-2); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0 16px; }
     .preco-box-player .preco-por { font-size: 36px; }
-
-    .btn-pagar { display: block; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); color: #000; text-decoration: none; border-radius: 6px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; width: 100%; letter-spacing: 0.5px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
-    .btn-pagar:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.3); }
-    .pagamento-info { margin-top: 10px; font-size: 12px; color: #555; text-align: center; }
+    .btn-pagar { display: block; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); color: #000; border-radius: 6px; padding: 16px 32px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; width: 100%; letter-spacing: 0.5px; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .btn-pagar:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.25); }
+    .pagamento-info { margin-top: 10px; font-size: 12px; color: var(--gray); text-align: center; }
 
     /* ERRO */
     .erro-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 6px; padding: 14px 16px; color: #fca5a5; font-size: 13px; margin-top: 12px; display: none; }
 
     /* FOOTER */
-    footer { text-align: center; padding: 30px 20px; border-top: 1px solid #1a1a1a; color: #333; font-size: 12px; letter-spacing: 0.5px; }
+    footer { text-align: center; padding: 30px 20px; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gray); font-size: 12px; letter-spacing: 0.5px; }
 
     @media (max-width: 480px) {
       .opcoes { grid-template-columns: repeat(2, 1fr); }
@@ -280,7 +278,7 @@
       </div>
     </div>
     <div class="field">
-      <label>Referência musical <small style="color:#444;text-transform:none;letter-spacing:0">(opcional)</small></label>
+      <label>Referência musical <small style="color:#4a6080;text-transform:none;letter-spacing:0">(opcional)</small></label>
       <input type="text" id="ref" placeholder="Ex: Marília Mendonça, Roberto Carlos..." maxlength="100" />
     </div>
     <div class="erro-box" id="erro3">Por favor, selecione gênero e clima.</div>
@@ -294,15 +292,15 @@
     <div class="step-label">Passo 4 de 5</div>
     <h2>Detalhes Especiais</h2>
     <div class="field">
-      <label>Apelido ou frase especial <small style="color:#444;text-transform:none;letter-spacing:0">(opcional)</small></label>
+      <label>Apelido ou frase especial <small style="color:#4a6080;text-transform:none;letter-spacing:0">(opcional)</small></label>
       <input type="text" id="frase" placeholder="Ex: 'meu amor', apelido carinhoso..." maxlength="120" />
     </div>
     <div class="field">
-      <label>Lugar ou coisa especial para vocês <small style="color:#444;text-transform:none;letter-spacing:0">(opcional)</small></label>
+      <label>Lugar ou coisa especial para vocês <small style="color:#4a6080;text-transform:none;letter-spacing:0">(opcional)</small></label>
       <input type="text" id="especial" placeholder="Ex: a praia onde se conheceram..." maxlength="150" />
     </div>
     <div class="field">
-      <label>O que você quer que ela sinta <small style="color:#444;text-transform:none;letter-spacing:0">(opcional)</small></label>
+      <label>O que você quer que ela sinta <small style="color:#4a6080;text-transform:none;letter-spacing:0">(opcional)</small></label>
       <div class="opcoes-sentimento" id="sentir-opcoes">
         <div class="opcao-sentimento" data-value="Chorar de emoção">Chorar de emoção</div>
         <div class="opcao-sentimento" data-value="Sentir-se amada">Sentir-se amada</div>
@@ -345,7 +343,7 @@
   <div class="spinner-gold"></div>
   <h2>Criando sua música</h2>
   <p>Estamos compondo sua música personalizada.<br>Isso leva cerca de <strong style="color:#fff">2 a 4 minutos</strong>.</p>
-  <p style="margin-top:10px; color:#444; font-size:12px;">Não feche essa página ✦</p>
+  <p style="margin-top:10px;color:#4a6080;font-size:12px;">Não feche essa página ✦</p>
   <div class="loading-dots"><span></span><span></span><span></span></div>
 </div>
 
@@ -354,9 +352,9 @@
   <p>Ouça e, se gostar, faça o download por apenas R$19,90</p>
   <div id="musicas-lista"></div>
   <div class="preco-box-player">
-    <div class="preco-de" style="font-size:13px;color:#555;">R$39,90</div>
+    <div class="preco-de" style="font-size:13px;color:#4a6080;">R$39,90</div>
     <div class="preco-por"><span>R$</span>19,90</div>
-    <div style="font-size:12px;color:#666;margin-top:4px;">pagamento único · 50% OFF</div>
+    <div style="font-size:12px;color:#4a6080;margin-top:4px;">pagamento único · 50% OFF</div>
   </div>
   <div id="btn-pagar-container" style="display:none;">
     <button class="btn-pagar" id="btn-pagar-final" onclick="iniciarPagamento()">🔒 Pagar R$19,90 e baixar minha música</button>
@@ -511,7 +509,6 @@
     sec.style.display='block';
     const lista = document.getElementById('musicas-lista');
     lista.innerHTML='';
-    const s = songList[0];
     const card = document.createElement('div');
     card.className='musica-card';
     card.innerHTML=`
