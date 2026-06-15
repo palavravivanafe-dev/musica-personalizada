@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const APIFRAME_KEY = process.env.APIFRAME_KEY;
 const MP_TOKEN = process.env.MP_ACCESS_TOKEN;
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
-const PRECO = 27;
+const PRECO = 19.90;
 const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY;
 
 const mpClient = new MercadoPagoConfig({ accessToken: MP_TOKEN });
