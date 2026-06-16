@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const APIFRAME_KEY = process.env.APIFRAME_KEY;
 const MP_TOKEN = process.env.MP_ACCESS_TOKEN;
+const MP_PUBLIC_KEY = process.env.MP_PUBLIC_KEY;
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const PRECO = 19.90;
 const ANTHROPIC_KEY = process.env.ANTHROPIC_KEY;
@@ -168,12 +169,8 @@ app.post('/api/generate', async (req, res) => {
     const headers = { 'X-API-Key': APIFRAME_KEY, 'Content-Type': 'application/json' };
     var vocalGender = formData.clima && formData.clima.includes('Espiritual') ? 'f' : 'm';
     const body1 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, model_version: 'V5_5', style: styleTags, title: songTitle, vocal_gender: vocalGender, negative_tags: 'low quality, amateur, noise, distortion' } };
-    const body2 = { model: 'suno', prompt: lyrics, sunoParams: { custom_mode: true, model_version: 'V5_5', style: styleTags, title: songTitle + ' v2', vocal_gender: vocalGender, negative_tags: 'low quality, amateur, noise, distortion' } };
-    const [r1, r2] = await Promise.all([
-      axios.post('https://api.apiframe.ai/v2/music/generate', body1, { headers }),
-      axios.post('https://api.apiframe.ai/v2/music/generate', body2, { headers })
-    ]);
-    const taskIds = [r1.data && r1.data.jobId, r2.data && r2.data.jobId].filter(Boolean);
+    const r1 = await axios.post('https://api.apiframe.ai/v2/music/generate', body1, { headers });
+    const taskIds = [r1.data && r1.data.jobId].filter(Boolean);
     sessions.get(sessionId).taskIds = taskIds;
     res.json({ sessionId: sessionId, taskIds: taskIds });
   } catch (err) {
@@ -186,20 +183,19 @@ app.get('/api/status/:sessionId', async (req, res) => {
   const session = sessions.get(req.params.sessionId);
   if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
   if (session.songs.length >= 1) {
-    return res.json({ status: 'done', songs: session.songs.slice(0,2).map((s,i) => ({ index:i, title:s.title })) });
+    return res.json({ status: 'done', songs: session.songs.map((s,i) => ({ index:i, title:s.title })) });
   }
   try {
     const headers = { 'X-API-Key': APIFRAME_KEY };
     const allSongs = [];
     for (var i = 0; i < session.taskIds.length; i++) {
-      var jobId = session.taskIds[i];
-      var r = await axios.get('https://api.apiframe.ai/v2/jobs/' + jobId, { headers });
+      var r = await axios.get('https://api.apiframe.ai/v2/jobs/' + session.taskIds[i], { headers });
       if (r.data && r.data.status === 'COMPLETED' && r.data.result && r.data.result.tracks) {
         r.data.result.tracks.forEach(track => { if (track.audioUrl) allSongs.push({ title: track.title || 'Versao', url: track.audioUrl }); });
       }
     }
     if (allSongs.length >= 1) {
-      session.songs = allSongs.slice(0,2);
+      session.songs = allSongs.slice(0,1);
       return res.json({ status: 'done', songs: session.songs.map((s,i) => ({ index:i, title:s.title })) });
     }
     res.json({ status: 'processing' });
@@ -208,12 +204,16 @@ app.get('/api/status/:sessionId', async (req, res) => {
   }
 });
 
-app.post('/api/payment', async (req, res) => {
-  const sessionId = req.body.sessionId;
-  const chosenIndex = req.body.chosenIndex;
+// Retorna public key para o frontend
+app.get('/api/mp-public-key', (req, res) => {
+  res.json({ publicKey: MP_PUBLIC_KEY });
+});
+
+// Cria preferência para checkout transparente
+app.post('/api/criar-preferencia', async (req, res) => {
+  const { sessionId } = req.body;
   const session = sessions.get(sessionId);
   if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
-  session.chosenIndex = chosenIndex;
   try {
     const preference = new Preference(mpClient);
     const result = await preference.create({
@@ -227,12 +227,94 @@ app.post('/api/payment', async (req, res) => {
         auto_approve: true,
         payment_methods: { excluded_payment_types: [{id:'ticket'},{id:'atm'}], installments: 1 },
         notification_url: BASE_URL + '/api/webhook',
-        external_reference: sessionId + ':' + chosenIndex
+        external_reference: sessionId + ':0'
       }
     });
-    res.json({ checkoutUrl: result.init_point });
+    res.json({ preferenceId: result.id, checkoutUrl: result.init_point });
   } catch (err) {
-    res.status(500).json({ error: 'Erro ao criar pagamento.' });
+    console.error('Erro preferencia:', err.message);
+    res.status(500).json({ error: 'Erro ao criar preferencia.' });
+  }
+});
+
+// Processa pagamento transparente (cartão)
+app.post('/api/processar-pagamento', async (req, res) => {
+  const { sessionId, token, paymentMethodId, installments, email, cpf } = req.body;
+  const session = sessions.get(sessionId);
+  if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
+  try {
+    const payment = new Payment(mpClient);
+    const result = await payment.create({
+      body: {
+        transaction_amount: PRECO,
+        token,
+        description: 'Musica Personalizada',
+        installments: installments || 1,
+        payment_method_id: paymentMethodId,
+        payer: { email, identification: { type: 'CPF', number: cpf } },
+        external_reference: sessionId + ':0',
+        notification_url: BASE_URL + '/api/webhook'
+      }
+    });
+    if (result.status === 'approved') {
+      session.paid = true;
+      res.json({ status: 'approved', songUrl: session.songs[0] ? session.songs[0].url : null });
+    } else if (result.status === 'in_process' || result.status === 'pending') {
+      res.json({ status: 'pending' });
+    } else {
+      res.json({ status: 'rejected', message: 'Pagamento recusado. Tente outro cartão.' });
+    }
+  } catch (err) {
+    console.error('Erro pagamento:', err.message);
+    res.status(500).json({ error: 'Erro ao processar pagamento.' });
+  }
+});
+
+// Processa PIX
+app.post('/api/criar-pix', async (req, res) => {
+  const { sessionId, email, cpf } = req.body;
+  const session = sessions.get(sessionId);
+  if (!session) return res.status(404).json({ error: 'Sessao nao encontrada' });
+  try {
+    const payment = new Payment(mpClient);
+    const result = await payment.create({
+      body: {
+        transaction_amount: PRECO,
+        description: 'Musica Personalizada',
+        payment_method_id: 'pix',
+        payer: { email, identification: { type: 'CPF', number: cpf } },
+        external_reference: sessionId + ':0',
+        notification_url: BASE_URL + '/api/webhook'
+      }
+    });
+    session.pixPaymentId = result.id;
+    res.json({
+      status: result.status,
+      pixCopiaECola: result.point_of_interaction?.transaction_data?.qr_code,
+      qrCodeBase64: result.point_of_interaction?.transaction_data?.qr_code_base64,
+      paymentId: result.id
+    });
+  } catch (err) {
+    console.error('Erro PIX:', err.message);
+    res.status(500).json({ error: 'Erro ao criar PIX.' });
+  }
+});
+
+// Verifica se PIX foi pago
+app.get('/api/verificar-pix/:sessionId/:paymentId', async (req, res) => {
+  const session = sessions.get(req.params.sessionId);
+  if (!session) return res.status(404).json({ paid: false });
+  try {
+    const payment = new Payment(mpClient);
+    const result = await payment.get({ id: req.params.paymentId });
+    if (result.status === 'approved') {
+      session.paid = true;
+      res.json({ paid: true, songUrl: session.songs[0] ? session.songs[0].url : null });
+    } else {
+      res.json({ paid: false });
+    }
+  } catch(err) {
+    res.json({ paid: false });
   }
 });
 
@@ -247,7 +329,7 @@ app.post('/api/webhook', async (req, res) => {
     if (paymentData.status === 'approved' && paymentData.external_reference) {
       var parts = paymentData.external_reference.split(':');
       var session = sessions.get(parts[0]);
-      if (session) { session.paid = true; session.chosenIndex = parseInt(parts[1]) || 0; }
+      if (session) { session.paid = true; }
     }
   } catch(err) {}
 });
@@ -273,7 +355,7 @@ app.get('/api/download/:sessionId', (req, res) => {
   var session = sessions.get(req.params.sessionId);
   if (!session) return res.status(404).json({ error: 'Nao encontrado' });
   if (!session.paid) return res.status(403).json({ error: 'Pagamento nao confirmado' });
-  var song = session.songs[session.chosenIndex] || session.songs[0];
+  var song = session.songs[0];
   if (!song) return res.status(404).json({ error: 'Musica nao encontrada' });
   res.json({ url: song.url, title: song.title });
 });
